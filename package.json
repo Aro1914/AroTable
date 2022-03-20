@@ -14,5 +14,13 @@
   ],
   "type": "module",
   "author": "Emmanuel Agbavwe",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aro1914/AroTable.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Aro1914/AroTable/issues"
+  },
+  "homepage": "https://github.com/Aro1914/AroTable#readme"
 }
