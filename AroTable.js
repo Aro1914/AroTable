@@ -26,12 +26,12 @@ class AroTable {
     #array = [];
     #indices = {};
     /**
-     * Creates an AroTable. Takes an optional argument, data—a single integer or an array.
+     * Creates an AroTable. Works like an overloaded constructor it could take no arguments, or it could take a single integer or multiple integers could be passed, or an array, or even still an array followed by a single or multiple integers.
      * @param data
+     * @param values
      */
-    constructor(data = null) {
-        Array.isArray(data) ?
-            this.insertArray(data) : data ? this.insert(data) : false;
+    constructor(data = null, ...values) {
+        this.add(data, ...values);
     }
 
     #aroSort (array) {
@@ -163,12 +163,24 @@ class AroTable {
     };
 
     /**
-     * Inserts a single integer into the AroTable. Returns true if successful, but returns false if not.
-     * @param {Number}  integer
+     * Adds the given arguments to the AroTable. its arguments could be empty, or an integer or multiple integers could be passed, or an array, or an array followed by a single or multiple integers.
+     * @param data
+     * @param values
      */
-    insert (integer) {
-        if (!integer || integer == null || integer == undefined || isNaN(integer)) return false;
+    add (data = null, ...values) {
         const previousLength = this.#array.length;
+        values ?
+            this.#insertArray(values) : false;
+        Array.isArray(data) ?
+            this.#insertArray(data) : data ? this.#insert(data) : false;
+        if (previousLength == this.#array.length) {
+            return false;
+        }
+        return true;
+    }
+
+    #insert (integer) {
+        if (!integer || integer == null || integer == undefined || isNaN(integer)) return false;
         integer < 0 ?
             (() => {
                 integer *= -1;
@@ -182,17 +194,10 @@ class AroTable {
                 this.#pos[integer]++ :
                 this.#pos[integer] = 1;
         this.#arrange();
-        if (previousLength == this.#array.length) {
-            return false;
-        }
         return true;
     }
 
-    /**
-     * Inserts an array of integers into the AroTable. Returns true if successful, but returns false if not.
-     * @param {Array<>}  integers
-     */
-    insertArray (integers) {
+    #insertArray (integers) {
         if (integers == null || integers == undefined || integers.length == 0 || !Array.isArray(integers)) return false;
         const previousLength = this.#array.length;
         for (let index = 0; index < integers.length; index++) {
@@ -268,6 +273,14 @@ class AroTable {
             return false;
         }
     }
+
+    /**
+     * Returns true if the AroTable is empty, returns false if not.
+     */
+    isEmpty () {
+        return this.#array.length == 0 ? true : false;
+    }
+
 
     /**
      * Wipes the AroTable clean.
@@ -444,9 +457,9 @@ class AroTable {
      */
     getDistribution () {
         return {
-            'Positive Numbers':
+            'Positive Integers':
                 Number(this.#array.length - this.#negLength),
-            'Negative Numbers': Number(this.#negLength)
+            'Negative Integers': Number(this.#negLength)
         };
     }
 
