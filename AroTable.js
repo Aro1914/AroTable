@@ -16,6 +16,9 @@
  *   limitations under the License.
  */
 
+/**
+ * A sorted integer data structure
+ */
 class AroTable {
     #pos = {};
     #neg = {};
@@ -23,11 +26,12 @@ class AroTable {
     #array = [];
     #indices = {};
     /**
-     * Creates an AroTable from an array.
-     * @param {Array<>}  data
+     * Creates an AroTable. Takes an optional argument, data—a single integer or an array.
+     * @param data
      */
-    constructor(data) {
-        this.insertArray(data);
+    constructor(data = null) {
+        Array.isArray(data) ?
+            this.insertArray(data) : data ? this.insert(data) : false;
     }
 
     #aroSort (array) {
@@ -263,6 +267,18 @@ class AroTable {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Wipes the AroTable clean.
+     */
+    empty () {
+        this.#pos = {};
+        this.#neg = {};
+        this.#negLength = 0;
+        this.#indices = {};
+        this.#array = [];
+        return true;
     }
 
     /**
