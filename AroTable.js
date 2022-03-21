@@ -19,7 +19,7 @@
 /**
  * A sorted integer data structure
  */
-class AroTable {
+module.exports = class AroTable {
     #pos = {};
     #neg = {};
     #negLength = 0;
@@ -524,5 +524,3 @@ class AroTable {
         };
     }
 }
-
-export { AroTable as default };

@@ -1,5 +1,5 @@
 {
-  "name": "arotable",
+  "name": "@aro1914/arotable",
   "version": "2.1.1",
   "description": "A sorted integer data structure.",
   "main": "AroTable.js",
@@ -12,12 +12,11 @@
     "Integer",
     "Data-Structure"
   ],
-  "type": "module",
   "author": "Emmanuel Agbavwe",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Aro1914/AroTable.git"
+    "url": "git://github.com/Aro1914/AroTable.git"
   },
   "bugs": {
     "url": "https://github.com/Aro1914/AroTable/issues"
