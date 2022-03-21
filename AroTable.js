@@ -26,7 +26,7 @@ class AroTable {
     #array = [];
     #indices = {};
     /**
-     * Creates an AroTable. Works like an overloaded constructor it could take no arguments, or it could take a single integer or multiple integers could be passed, or an array, or even still an array followed by a single or multiple integers.
+     * Creates an AroTable. Works like an overloaded constructor, it could take no arguments, or it could take a single integer or multiple integers could be passed, or an array, or even still an array followed by a single or multiple integers.
      * @param data
      * @param values
      */
@@ -162,23 +162,6 @@ class AroTable {
             })();
     };
 
-    /**
-     * Adds the given arguments to the AroTable. its arguments could be empty, or an integer or multiple integers could be passed, or an array, or an array followed by a single or multiple integers.
-     * @param data
-     * @param values
-     */
-    add (data = null, ...values) {
-        const previousLength = this.#array.length;
-        values ?
-            this.#insertArray(values) : false;
-        Array.isArray(data) ?
-            this.#insertArray(data) : data ? this.#insert(data) : false;
-        if (previousLength == this.#array.length) {
-            return false;
-        }
-        return true;
-    }
-
     #insert (integer) {
         if (!integer || integer == null || integer == undefined || isNaN(integer)) return false;
         integer < 0 ?
@@ -201,6 +184,10 @@ class AroTable {
         if (integers == null || integers == undefined || integers.length == 0 || !Array.isArray(integers)) return false;
         const previousLength = this.#array.length;
         for (let index = 0; index < integers.length; index++) {
+            if (Array.isArray(integers[index])) {
+                this.#insertArray(integers[index]);
+                continue;
+            }
             let element = Number(integers[index]);
 
             if (integers[index] == null) continue;
@@ -226,6 +213,22 @@ class AroTable {
     }
 
     /**
+     * Adds the given arguments to the AroTable. its arguments could be empty, or an integer or multiple integers could be passed, or an array, or an array followed by a single or multiple integers. Returns true if successful, returns false if not.
+     * @param data
+     * @param values
+     */
+    add (data = null, ...values) {
+        const previousLength = this.#array.length;
+
+        values ?
+            this.#insertArray(values) : false;
+        Array.isArray(data) ?
+            this.#insertArray(data) : data ? this.#insert(data) : false;
+
+        return previousLength == this.#array.length ? false : true;
+    }
+
+    /**
      * Searches for an occurrence of the given value in the AroTable. Returns the indices of each occurrence if found, if not returns false.
      * @param {Number} value
      * @returns {Array<Number>} array
@@ -239,7 +242,7 @@ class AroTable {
      * Deletes the first occurrence of the integer from the AroTable. Returns true if successful, returns false if not.
      * @param {Number} integer
      */
-    delete (integer) {
+    remove (integer) {
         if (this.search(integer) !== false) {
             Number(integer) < 0 ?
                 (() => {
@@ -258,7 +261,7 @@ class AroTable {
      * Deletes all occurrences of the integer from the AroTable. Returns true if successful, returns false if not.
      * @param {Number} integer
      */
-    deleteAll (integer) {
+    removeAll (integer) {
         if (this.search(integer) !== false) {
             Number(integer) < 0 ?
                 (() => {
@@ -291,30 +294,39 @@ class AroTable {
         this.#negLength = 0;
         this.#indices = {};
         this.#array = [];
-        return true;
     }
 
     /**
-     * Deletes all negative integers from the AroTable.
+     * Removes all positive integers from the AroTable. Returns true if successful, returns false if not.
      */
     dropPositives () {
+        const previousLength = this.#array.length;
+
         this.#pos = {};
         this.#arrange();
+
+        return previousLength == this.#array.length ? false : true;
     }
 
     /**
-     * Deletes all positive integers from the AroTable.
+     * Removes all negative integers from the AroTable. Returns true if successful, returns false if not.
      */
     dropNegatives () {
+        const previousLength = this.#array.length;
+
         this.#neg = {};
         this.#negLength = 0;
         this.#arrange();
+
+        return previousLength == this.#array.length ? false : true;
     }
 
     /**
-     * Deletes all integers with a single occurrence from the AroTable.
+     * Removes all integers with a single occurrence from the AroTable. Returns true if successful, returns false if not.
      */
     dropUnits () {
+        const previousLength = this.#array.length;
+
         for (const intCount in this.#neg) (() => {
             this.#neg[intCount] == 1 ?
                 (() => {
@@ -332,12 +344,43 @@ class AroTable {
         })();
 
         this.#arrange();
+
+        return previousLength == this.#array.length ? false : true;
     }
 
     /**
-     * Deletes all duplicated occurrences from the AroTable, leaving a single occurrence.
+     * Removes all integers with multiple occurrences from the AroTable. Returns true if successful, returns false if not.
+     */
+    dropDuplicates () {
+        const previousLength = this.#array.length;
+
+        for (const intCount in this.#neg) (() => {
+            this.#neg[intCount] > 1 ?
+                (() => {
+                    this.#negLength -= this.#neg[intCount];
+                    this.#neg[intCount] = 0;
+                })()
+                :
+                false;
+        })();
+
+        for (const intCount in this.#pos) (() => {
+            this.#pos[intCount] > 1 ?
+                this.#pos[intCount] = 0 :
+                false;
+        })();
+
+        this.#arrange();
+
+        return previousLength == this.#array.length ? false : true;
+    }
+
+    /**
+     * Removes all duplicated occurrences from the AroTable, leaving a single occurrence. Returns true if successful, returns false if not.
      */
     clearDuplicates () {
+        const previousLength = this.#array.length;
+
         for (const intCount in this.#neg) (() => {
             this.#neg[intCount] > 0 ?
                 (() => {
@@ -355,6 +398,8 @@ class AroTable {
         })();
 
         this.#arrange();
+
+        return previousLength == this.#array.length ? false : true;
     }
 
 
@@ -433,7 +478,7 @@ class AroTable {
     }
 
     /**
-     * Returns a sorted array of all positive integers in the AroTable.
+     * Returns a sorted array of all positive integers in the AroTable, if none exists returns false.
      * @returns {Array<Number>} array
      */
     returnPositives () {
@@ -452,7 +497,23 @@ class AroTable {
     }
 
     /**
-     * Returns an object showing the distribution of numbers in the AroTable.
+     * Returns an array representation of the AroTable.
+     * @returns {Array<Number>} array
+     */
+    returnArray () {
+        return this.#array;
+    }
+
+    /**
+     * Returns the size of the AroTable.
+     * @returns {Number} size
+     */
+    size () {
+        return this.#array.length;
+    }
+
+    /**
+     * Returns an object showing the distribution of integers in the AroTable.
      * @returns object
      */
     getDistribution () {
@@ -461,14 +522,6 @@ class AroTable {
                 Number(this.#array.length - this.#negLength),
             'Negative Integers': Number(this.#negLength)
         };
-    }
-
-    /**
-     * Returns an array representation of the AroTable.
-     * @returns {Array<Number>} array
-     */
-    returnArray () {
-        return this.#array;
     }
 }
 
