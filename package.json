@@ -1,7 +1,7 @@
 {
-  "name": "@aro1914/arotable",
+  "name": "arotable",
   "version": "2.1.8",
-  "description": "A sorted integer data structure.",
+  "description": "A self sorting integer data structure.",
   "main": "AroTable.js",
   "scripts": {
     "test": "echo \"No test specified\""
@@ -21,8 +21,5 @@
   "bugs": {
     "url": "https://github.com/Aro1914/AroTable/issues"
   },
-  "homepage": "https://github.com/Aro1914/AroTable#readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  }
+  "homepage": "https://github.com/Aro1914/AroTable#readme"
 }
