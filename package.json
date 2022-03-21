@@ -21,8 +21,5 @@
   "bugs": {
     "url": "https://github.com/Aro1914/AroTable/issues"
   },
-  "homepage": "https://github.com/Aro1914/AroTable#readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  }
+  "homepage": "https://github.com/Aro1914/AroTable#readme"
 }
