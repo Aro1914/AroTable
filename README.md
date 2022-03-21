@@ -27,6 +27,7 @@
     - [The **empty()** Method](#the-empty-method)
     - [The **isEmpty()** Method](#the-isempty-method)
   - [Requirements](#requirements)
+  - [Contributors](#contributors)
   - [Contributing](#contributing)
   - [License](#license)
 
@@ -309,6 +310,14 @@ aroTable.isEmpty() // Returns true
 ## Requirements
 
 The AroTable data structure has zero dependencies.
+
+## Contributors
+
+<a href="https://github.com/aro1914/arotable/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=aro1914/arotable" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## Contributing
 
