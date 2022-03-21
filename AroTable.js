@@ -26,7 +26,7 @@ class AroTable {
     #array = [];
     #indices = {};
     /**
-     * Creates an AroTable. Works like an overloaded constructor, it could take no arguments, or it could take a single integer or multiple integers could be passed, or an array, or even still an array followed by a single or multiple integers.
+     * Creates an AroTable. Works like an overloaded constructor, it could take no arguments, or it could take a single integer or multiple integers could be passed, or an array, or better still a combination of both.
      * @param data
      * @param values
      */
@@ -213,7 +213,7 @@ class AroTable {
     }
 
     /**
-     * Adds the given arguments to the AroTable. its arguments could be empty, or an integer or multiple integers could be passed, or an array, or an array followed by a single or multiple integers. Returns true if successful, returns false if not.
+     * Adds the given arguments to the AroTable. its arguments could be an integer or multiple integers could be passed, or an array, or better still a combination of both. Returns true if successful, returns false if not.
      * @param data
      * @param values
      */
