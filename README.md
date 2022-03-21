@@ -28,7 +28,6 @@
     - [The **isEmpty()** Method](#the-isempty-method)
   - [Requirements](#requirements)
   - [Acknowledgments](#acknowledgments)
-  - [Contributors](#contributors)
   - [Contributing](#contributing)
   - [License](#license)
 
@@ -325,14 +324,6 @@ The AroTable data structure has zero dependencies.
 ## Acknowledgments
 
 I would like to express my gratitude to my senior colleague, [Mr. Ajayi Taiwo](https://github.com/ajayioyetomi) who helped me with useful technical insights as I developed the code.
-
-## Contributors
-
-<a href="https://github.com/aro1914/arotable/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=aro1914/arotable" />
-</a>
-
-Made with [contrib.rocks](https://contrib.rocks).
 
 ## Contributing
 
