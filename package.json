@@ -12,6 +12,7 @@
     "Integer",
     "Data-Structure"
   ],
+  "type":"module",
   "author": "Emmanuel Agbavwe",
   "license": "Apache-2.0",
   "repository": {

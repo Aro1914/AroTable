@@ -27,6 +27,7 @@
     - [The **empty()** Method](#the-empty-method)
     - [The **isEmpty()** Method](#the-isempty-method)
   - [Requirements](#requirements)
+  - [Acknowledgments](#acknowledgments)
   - [Contributors](#contributors)
   - [Contributing](#contributing)
   - [License](#license)
@@ -47,7 +48,13 @@ Install the **AroTable** package with [NPM](https://www.npmjs.org/):
 npm install arotable
 ```
 
-In your application code, to use the data structure, import AroTable. Then assign a variable to a new instance of the AroTable class:
+In your package.json, set "type" to "module" to enable you import a module.
+
+```json
+"type" : "module"
+```
+
+Now when that is done, in your application code, import 'arotable' and assign a variable to a new instance of the AroTable class:
 
 ```js
 import AroTable from 'arotable';
