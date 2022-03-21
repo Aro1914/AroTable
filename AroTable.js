@@ -525,4 +525,4 @@ class AroTable {
     }
 }
 
-export default AroTable;
+export { AroTable as default };
