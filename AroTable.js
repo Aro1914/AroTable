@@ -17,7 +17,7 @@
  */
 
 /**
- * A sorted integer data structure
+ * A self sorting integer data structure
  */
 export default class AroTable {
     #pos = {};
