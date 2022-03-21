@@ -54,7 +54,7 @@ In your package.json, set "type" to "module" to enable you import a module.
 "type" : "module"
 ```
 
-Now when that is done, in your application code, import 'arotable' and assign a variable to a new instance of the AroTable class:
+Now when that is done, in your application code, import 'arotable' and assign a new instance of the AroTable class to a variable:
 
 ```js
 import AroTable from 'arotable';
