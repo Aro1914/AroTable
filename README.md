@@ -331,5 +331,5 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## License
 
-The AroTable code is released under the
+The AroTable Project is released under the
 [Apache License](http://www.apache.org/licenses/).
