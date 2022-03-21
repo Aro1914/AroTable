@@ -311,6 +311,10 @@ aroTable.isEmpty() // Returns true
 
 The AroTable data structure has zero dependencies.
 
+## Acknowledgments
+
+I would like to express my gratitude to my senior colleague, [Mr. Ajayi Taiwo](https://github.com/ajayioyetomi) who helped me with useful technical insights as I developed the code.
+
 ## Contributors
 
 <a href="https://github.com/aro1914/arotable/graphs/contributors">
