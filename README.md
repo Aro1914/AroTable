@@ -54,6 +54,10 @@ In your package.json, set "type" to "module" to enable you import a module.
 "type" : "module"
 ```
 
+Or you can rename the javascript file the module is to be used to have the .mjs extension:
+
+That is from `index.js` to `index.mjs`
+
 Now when that is done, in your application code, import 'arotable' and assign a new instance of the AroTable class to a variable:
 
 ```js

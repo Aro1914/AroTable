@@ -19,7 +19,7 @@
 /**
  * A sorted integer data structure
  */
-module.exports = class AroTable {
+export default class AroTable {
     #pos = {};
     #neg = {};
     #negLength = 0;
@@ -265,9 +265,8 @@ module.exports = class AroTable {
         if (this.search(integer) !== false) {
             Number(integer) < 0 ?
                 (() => {
-                    const reducer = this.#neg[Number(integer * -1)];
+                    this.#negLength -= this.#neg[Number(integer * -1)];
                     this.#neg[Number(integer * -1)] = 0;
-                    this.#negLength -= reducer;
                 })() :
                 this.#pos[Number(integer)] = 0;
             this.#arrange();

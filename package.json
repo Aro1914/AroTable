@@ -1,6 +1,6 @@
 {
   "name": "@aro1914/arotable",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "A sorted integer data structure.",
   "main": "AroTable.js",
   "scripts": {
