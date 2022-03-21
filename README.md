@@ -34,7 +34,7 @@
 
 ## Description
 
-AroTable is a very fast  sorting data structure, with Big O Notation of O(n) in adding, but a Big O Notation of O(1) in removing and searching!
+AroTable is a very fast sorting data structure that runs on the AroSort sorting algorithm, with Big O Notation of O(n) in adding, but a Big O Notation of O(1) in removing and searching!
 
 Compatible with both client-side and server-side environments.
 
