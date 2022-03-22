@@ -133,9 +133,11 @@ export default class AroTable {
         (Object.keys(this.#pos).length) &&
             (() => {
                 const negLength = this.#negLength;
+
                 for (const numValue in this.#pos) {
                     if (isNaN(numValue))
                         return;
+
                     if (this.#pos[numValue] > 1) (() => {
                         for (let i = 0; i < this.#pos[numValue]; i++) (() => {
                             this.#array[this.#negLength] = Number(numValue);
@@ -158,12 +160,13 @@ export default class AroTable {
                     })();
                     else continue;
                 }
+
                 this.#negLength = negLength;
             })();
     };
 
     #insert (integer) {
-        if (!integer || integer == null || integer == undefined || isNaN(integer)) return false;
+        if (!integer || integer == null || integer == undefined || isNaN(integer)) return;
         integer < 0 ?
             (() => {
                 integer *= -1;
@@ -176,13 +179,14 @@ export default class AroTable {
             this.#pos[integer] ?
                 this.#pos[integer]++ :
                 this.#pos[integer] = 1;
+
         this.#arrange();
-        return true;
+
+        return;
     }
 
     #insertArray (integers) {
-        if (integers == null || integers == undefined || integers.length == 0 || !Array.isArray(integers)) return false;
-        const previousLength = this.#array.length;
+        if (integers == null || integers == undefined || integers.length == 0 || !Array.isArray(integers)) return;
         for (let index = 0; index < integers.length; index++) {
             if (Array.isArray(integers[index])) {
                 this.#insertArray(integers[index]);
@@ -206,10 +210,8 @@ export default class AroTable {
                     this.#pos[element] = 1;
         };
         this.#arrange();
-        if (previousLength == this.#array.length) {
-            return false;
-        }
-        return true;
+
+        return;
     }
 
     /**
@@ -426,6 +428,7 @@ export default class AroTable {
                 })() :
                 false;
         })();
+
         return duplicates.length > 0 ? this.#aroSort(duplicates) : false;
     }
 
