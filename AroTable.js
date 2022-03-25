@@ -35,62 +35,62 @@ export default class AroTable {
     }
 
     #aroSort (array) {
-        if (array === null || array === undefined) {
-            return [];
-        } else if (array.length <= 1) {
-            return array;
-        } else {
-            const pos = {}, neg = {}, sorted = [];
-            let negLength = 0, counter = 1;
+        return array === null || array === undefined ?
+            ([])() : array.length <= 1 ?
+                (array)() :
+                (() => {
+                    const pos = {}, neg = {}, sorted = [];
+                    let negLength = 0, counter = 1;
 
-            for (let index = 0; index < array.length; index++) (() => {
-                let element = Number(array[index]);
-                element < 0 ?
-                    (() => {
-                        element *= -1;
-                        neg[element] ?
-                            neg[element]++ :
-                            neg[element] = 1;
-                        negLength++;
-                    })() :
-                    pos[element] ?
-                        pos[element]++ :
-                        pos[element] = 1;
-            })();
-            if (negLength) (() => {
-                for (const numValue in neg) (() => {
-                    neg[numValue] > 1 ?
-                        (() => {
-                            for (let i = 0; i < neg[numValue]; i++)
+                    for (let index = 0; index < array.length; index++) (() => {
+                        let element = Number(array[index]);
+                        element < 0 ?
+                            (() => {
+                                element *= -1;
+                                neg[element] ?
+                                    neg[element]++ :
+                                    neg[element] = 1;
+                                negLength++;
+                            })() :
+                            pos[element] ?
+                                pos[element]++ :
+                                pos[element] = 1;
+                    })();
+                    (negLength) && (() => {
+                        for (const numValue in neg) (() => {
+                            neg[numValue] > 1 ?
+                                (() => {
+                                    for (let i = 0; i < neg[numValue]; i++)
+                                        (() => {
+                                            sorted[negLength - counter] = Number(numValue) * -1;
+                                            counter++;
+                                        })();
+                                })() :
                                 (() => {
                                     sorted[negLength - counter] = Number(numValue) * -1;
                                     counter++;
                                 })();
-                        })() :
-                        (() => {
-                            sorted[negLength - counter] = Number(numValue) * -1;
-                            counter++;
                         })();
-                })();
-            })();
+                    })();
 
-            if (Object.keys(pos).length) (() => {
-                for (const numValue in pos) (() => {
-                    pos[numValue] > 1 ?
+                    (Object.keys(pos).length) &&
                         (() => {
-                            for (let i = 0; i < pos[numValue]; i++) (() => {
-                                sorted[negLength] = Number(numValue);
-                                negLength++;
+                            for (const numValue in pos) (() => {
+                                pos[numValue] > 1 ?
+                                    (() => {
+                                        for (let i = 0; i < pos[numValue]; i++) (() => {
+                                            sorted[negLength] = Number(numValue);
+                                            negLength++;
+                                        })();
+                                    })() :
+                                    (() => {
+                                        sorted[negLength] = Number(numValue);
+                                        negLength++;
+                                    })();
                             })();
-                        })() :
-                        (() => {
-                            sorted[negLength] = Number(numValue);
-                            negLength++;
                         })();
+                    return sorted;
                 })();
-            })();
-            return sorted;
-        }
     };
 
     #arrange () {
@@ -101,11 +101,22 @@ export default class AroTable {
             (this.#negLength > 0) &&
                 (() => {
                     for (const numValue in this.#neg) {
-                        if (isNaN(numValue))
-                            return;
+                        isNaN(numValue) && (() => false)();
 
-                        if (this.#neg[numValue] > 1) (() => {
-                            for (let i = 0; i < this.#neg[numValue]; i++) (() => {
+                        if (this.#neg[numValue] > 1)
+                            (() => {
+                                for (let i = 0; i < this.#neg[numValue]; i++) (() => {
+                                    this.#array[this.#negLength - counter] = Number(numValue) * -1;
+
+                                    this.#indices[numValue * -1] ?
+                                        this.#indices[numValue * -1] = [Number(this.#negLength - counter), ...this.#indices[numValue * -1]] :
+                                        this.#indices[numValue * -1] = [Number(this.#negLength - counter)];
+
+                                    counter++;
+                                })();
+                            })();
+                        else if (this.#neg[numValue] > 0)
+                            (() => {
                                 this.#array[this.#negLength - counter] = Number(numValue) * -1;
 
                                 this.#indices[numValue * -1] ?
@@ -114,16 +125,6 @@ export default class AroTable {
 
                                 counter++;
                             })();
-                        })();
-                        else if (this.#neg[numValue] > 0) (() => {
-                            this.#array[this.#negLength - counter] = Number(numValue) * -1;
-
-                            this.#indices[numValue * -1] ?
-                                this.#indices[numValue * -1] = [Number(this.#negLength - counter), ...this.#indices[numValue * -1]] :
-                                this.#indices[numValue * -1] = [Number(this.#negLength - counter)];
-
-                            counter++;
-                        })();
                         else continue;
                     }
                 })();
@@ -135,8 +136,7 @@ export default class AroTable {
                 const negLength = this.#negLength;
 
                 for (const numValue in this.#pos) {
-                    if (isNaN(numValue))
-                        return;
+                    isNaN(numValue) && (() => false)();
 
                     if (this.#pos[numValue] > 1) (() => {
                         for (let i = 0; i < this.#pos[numValue]; i++) (() => {
@@ -166,7 +166,7 @@ export default class AroTable {
     };
 
     #insert (integer) {
-        if (!integer || integer == null || integer == undefined || isNaN(integer)) return;
+        (!integer || integer == null || integer == undefined || isNaN(integer) || integer === '') && (() => false)();
         integer < 0 ?
             (() => {
                 integer *= -1;
@@ -186,16 +186,18 @@ export default class AroTable {
     }
 
     #insertArray (integers) {
-        if (integers == null || integers == undefined || integers.length == 0 || !Array.isArray(integers)) return;
+        (integers == null || integers == undefined || integers.length == 0 || !Array.isArray(integers)) && (() => false)();
         for (let index = 0; index < integers.length; index++) {
             if (Array.isArray(integers[index])) {
                 this.#insertArray(integers[index]);
                 continue;
             }
-            let element = Number(integers[index]);
 
             if (integers[index] == null) continue;
-            if (isNaN(element)) continue;
+            if (isNaN(integers[index])) continue;
+            if (integers[index] === '') continue;
+
+            let element = Number(integers[index]);
             element < 0 ?
                 (() => {
                     element *= -1;
@@ -236,7 +238,7 @@ export default class AroTable {
      * @returns {Array<Number>} array
      */
     search (value) {
-        if (value == null || value == undefined || isNaN(value)) return false;
+        (value == null || value == undefined || isNaN(value)) && (() => false)();
         return this.#indices[Number(value)] ? this.#indices[Number(value)] : false;
     }
 
@@ -245,18 +247,18 @@ export default class AroTable {
      * @param {Number} integer
      */
     remove (integer) {
-        if (this.search(integer) !== false) {
-            Number(integer) < 0 ?
-                (() => {
-                    this.#neg[Number(integer * -1)]--;
-                    this.#negLength--;
-                })() :
-                this.#pos[Number(integer)]--;
-            this.#arrange();
-            return true;
-        } else {
-            return false;
-        }
+        return this.search(integer) !== false ?
+            ((() => {
+                Number(integer) < 0 ?
+                    (() => {
+                        this.#neg[Number(integer * -1)]--;
+                        this.#negLength--;
+                    })() :
+                    this.#pos[Number(integer)]--;
+                this.#arrange();
+                return true;
+            }))() :
+            (() => false)();
     }
 
     /**
@@ -264,18 +266,18 @@ export default class AroTable {
      * @param {Number} integer
      */
     removeAll (integer) {
-        if (this.search(integer) !== false) {
-            Number(integer) < 0 ?
-                (() => {
-                    this.#negLength -= this.#neg[Number(integer * -1)];
-                    this.#neg[Number(integer * -1)] = 0;
-                })() :
-                this.#pos[Number(integer)] = 0;
-            this.#arrange();
-            return true;
-        } else {
-            return false;
-        }
+        return this.search(integer) !== false ?
+            ((() => {
+                Number(integer) < 0 ?
+                    (() => {
+                        this.#negLength -= this.#neg[Number(integer * -1)];
+                        this.#neg[Number(integer * -1)] = 0;
+                    })() :
+                    this.#pos[Number(integer)] = 0;
+                this.#arrange();
+                return true;
+            }))() :
+            (() => false)();
     }
 
     /**
