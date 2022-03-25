@@ -1,12 +1,12 @@
-# AroTable
+# AroTable (For Client Side)
 
 ## Contents
 
-- [AroTable](#arotable)
+- [AroTable (For Client Side)](#arotable-for-client-side)
   - [Contents](#contents)
   - [Description](#description)
   - [Usage](#usage)
-    - [Client-side and Server-side](#client-side-and-server-side)
+    - [Client-side Only](#client-side-only)
   - [Methods](#methods)
     - [The **returnArray()** Method](#the-returnarray-method)
     - [The **size()** Method](#the-size-method)
@@ -40,7 +40,7 @@ Compatible with both client-side and server-side environments.
 
 ## Usage
 
-### Client-side and Server-side
+### Client-side Only
 
 Install the **AroTable** package with [NPM](https://www.npmjs.org/):
 
@@ -48,7 +48,7 @@ Install the **AroTable** package with [NPM](https://www.npmjs.org/):
 npm install arotable
 ```
 
-In your package.json, set "type" to "module" to enable you import a module.
+In your package.json, set "type" to "module" to enable you import an ES Module.
 
 ```json
 "type" : "module"
