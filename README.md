@@ -140,7 +140,7 @@ aroTable.add(1,'-2','three',-4,'5',null,7,undefined,'nine');  // returns true
 
 ### The **remove()** Method
 
-The **remove()** method takes in an integer argument and removes an occurrence of the integer from the AroTable. Returns true if successful, returns false if not:
+The **remove()** method takes the same kind of arguments as the [add()](#the-add-method) method and then removes an occurrence of any value—that exists in the AroTable—passed as an argument from the AroTable. Returns true if successful, returns false if not:
 
 ```js
 const aroTable = new AroTable(2);
@@ -149,9 +149,11 @@ aroTable.remove(1); // Returns false
 aroTable.remove(2); // Returns true
 ```
 
+The **remove()** method can also work with strings that can be converted to a valid integer, with the exception of **null** and empty string (**''**). See the [add()](#the-add-method) method for examples.
+
 ### The **removeAll()** Method
 
-The **removeAll()** method takes in an integer argument and removes all occurrences of the integer from the AroTable. Returns true if successful, returns false if not:
+The **removeAll()** method takes the same kind of arguments as the [add()](#the-add-method) method and removes all occurrences of any value—that exists in the AroTable—passed as an argument from the AroTable. Returns true if successful, returns false if not:
 
 ```js
 const aroTable = new AroTable(2,2,2,4,5,6,2);
@@ -161,15 +163,17 @@ aroTable.removeAll('2'); // Returns true
 aroTable.returnArray(); // Returns [4, 5, 6]
 ```
 
+The **removeAll()** method can also work with strings that can be converted to a valid integer, with the exception of **null** and empty string (**''**). See the [add()](#the-add-method) method for examples.
+
 ### The **search()** Method
 
-The **search()** method takes in an integer argument and returns the indices that that integer would appear in an array representation, returns false if no occurrence is found:
+The **search()** method takes in an integer argument. Returns an array with two values, the first is the first index the integer occurs in an array representation of the AroTable, and the second shows how many times it occurred. If no occurrence is found, returns false.
 
 ```js
 const aroTable = new AroTable(1,3,-2,5,6,-2,6,7,3);
 
-aroTable.search(-2); // Returns [0, 1]
-aroTable.search(3); // Returns [3, 4]
+aroTable.search(-2); // Returns [ 0, 2 ]
+aroTable.search(3); // Returns [ 3, 1 ]
 aroTable.search(9); // Returns false
 ```
 
@@ -188,7 +192,7 @@ aroTable.returnArray(); // Returns [ 1, 2, 3, 4, 5, 6 ]
 
 ### The **returnDuplicates()** Method
 
-The **returnDuplicates()** method returns a sorted array of all integers with duplicated occurrences in the AroTable, if none exists, returns false:
+The **returnDuplicates()** method returns a sorted array (using Merge Sort) of all integers with duplicated occurrences in the AroTable, if none exists, returns false:
 
 ```js
 const aroTable = new AroTable(1,2,3,4,2,3,4,5,6,6,6,3);
@@ -224,7 +228,7 @@ aroTable.dropUnits(); // Returns false
 
 ### The **returnUnits()** Method
 
-The **returnUnits()** method returns a sorted array of all integers with a single occurrence in the AroTable, if none exists, returns false:
+The **returnUnits()** method returns a sorted array (using Merge Sort) of all integers with a single occurrence in the AroTable, if none exists, returns false:
 
 ```js
 const aroTable = new AroTable(1,2,3,4,2,3,4,5,6,6,6,3);
@@ -248,7 +252,7 @@ aroTable.dropPositives(); // Returns false
 
 ### The **returnPositives()** Method
 
-The **returnPositives()** method returns a sorted array of all positive integers in the AroTable, if none exists returns false:
+The **returnPositives()** method returns a sorted array (using Merge Sort) of all positive integers in the AroTable, if none exists returns false:
 
 ```js
 const aroTable = new AroTable(-5,-4,-3,'-2',-1,'0',1,2,'3',4,5);
@@ -272,7 +276,7 @@ aroTable.dropNegatives(); // Returns false
 
 ### The **returnNegatives()** Method
 
-The **returnNegatives()** method returns a sorted array of all negative integers in the AroTable, if none exists returns false:
+The **returnNegatives()** method returns a sorted array (using Merge Sort) of all negative integers in the AroTable, if none exists returns false:
 
 ```js
 const aroTable = new AroTable(-5,-4,-3,'-2',-1,'0',1,2,'3',4,5);

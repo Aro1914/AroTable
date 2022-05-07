@@ -17,10 +17,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Aro1914/AroTable.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Aro1914/AroTable/issues"
+    "url": "git://github.com/Aro1914/AroTable.git/issues"
   },
   "homepage": "https://github.com/Aro1914/AroTable#readme"
 }
