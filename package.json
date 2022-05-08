@@ -19,5 +19,8 @@
     "type": "git",
     "url": "git://github.com/Aro1914/AroTable.git/issues"
   },
+  "bugs": {
+    "url": "https://github.com/Aro1914/AroTable/issues"
+  },  
   "homepage": "https://github.com/Aro1914/AroTable#readme"
 }

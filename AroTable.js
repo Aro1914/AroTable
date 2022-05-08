@@ -121,7 +121,6 @@ export default class AroTable {
             this.#pos[integer]?.[1] ?
                 this.#pos[integer][1]++ :
                 this.#pos[integer] = [null, 1];
-
         return;
     }
 
@@ -130,7 +129,6 @@ export default class AroTable {
             integers == undefined ||
             !integers.length ||
             !Array.isArray(integers)) return false;
-
         let index = 0;
         for (index; index < integers.length; index++) {
             let element = integers[index];
@@ -138,7 +136,6 @@ export default class AroTable {
                 this.#insertArray(element) :
                 this.#insert(element);
         }
-
         return;
     }
 
@@ -194,14 +191,11 @@ export default class AroTable {
      */
     add (integer = null, ...integers) {
         const previousLength = this.#array.length;
-
         integers &&
             this.#insertArray(integers);
         Array.isArray(integer) ?
             this.#insertArray(integer) : integer && this.#insert(integer);
-
         this.#arrange();
-
         return previousLength != this.#array.length;
     }
 
@@ -309,18 +303,14 @@ export default class AroTable {
      */
     dropUnits () {
         const previousLength = this.#array.length;
-
         for (const intCount in this.#neg)
             if (this.#neg[intCount][1] == 1)
                 this.#negLength -= this.#neg[intCount][1],
                     this.#neg[intCount][1] = 0;
-
         for (const intCount in this.#pos)
             if (this.#pos[intCount][1] == 1)
                 this.#pos[intCount][1] = 0;
-
         this.#arrange();
-
         return previousLength != this.#array.length;
     }
 
@@ -330,18 +320,14 @@ export default class AroTable {
      */
     dropDuplicates () {
         const previousLength = this.#array.length;
-
         for (const intCount in this.#neg)
             if (this.#neg[intCount][1] > 1)
                 this.#negLength -= this.#neg[intCount][1],
                     this.#neg[intCount][1] = 0;
-
         for (const intCount in this.#pos)
             if (this.#pos[intCount][1] > 1)
                 this.#pos[intCount][1] = 0;
-
         this.#arrange();
-
         return previousLength != this.#array.length;
     }
 
@@ -351,18 +337,14 @@ export default class AroTable {
      */
     clearDuplicates () {
         const previousLength = this.#array.length;
-
         for (const intCount in this.#neg)
             if (this.#neg[intCount][1] > 0)
                 this.#negLength -= (this.#neg[intCount][1] - 1),
                     this.#neg[intCount][1] = 1;
-
         for (const intCount in this.#pos)
             if (this.#pos[intCount][1] > 0)
                 this.#pos[intCount][1] = 1;
-
         this.#arrange();
-
         return previousLength != this.#array.length;
     }
 
@@ -377,12 +359,10 @@ export default class AroTable {
             if (this.#neg[int][1] > 1)
                 duplicates[index][1] = Number(int * -1),
                     index++;
-
         for (const int in this.#pos)
             if (this.#pos[int][1] > 1)
                 duplicates[index][1] = Number(int),
                     index++;
-
         return duplicates.length > 0 ? this.#mergeSort(duplicates) : false;
     }
 
@@ -396,12 +376,10 @@ export default class AroTable {
             if (this.#neg[int][1] == 1)
                 units[index][1] = Number(int * -1),
                     index++;
-
         for (const int in this.#pos)
             if (this.#pos[int][1] == 1)
                 units[index][1] = Number(int),
                     index++;
-
         return units.length > 0 ? this.#mergeSort(units) : false;
     }
 
@@ -415,7 +393,6 @@ export default class AroTable {
             if (this.#neg[neg][1] != 0)
                 negatives[index][1] = Number(neg * -1),
                     index++;
-
         return negatives.length > 0 ? this.#mergeSort(negatives) : false;
     }
 
@@ -429,7 +406,6 @@ export default class AroTable {
             if (this.#pos[pos][1] != 0)
                 positives[index][1] = Number(pos),
                     index++;
-
         return positives.length > 0 ? this.#mergeSort(positives) : false;
     }
 
