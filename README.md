@@ -13,6 +13,7 @@
     - [The **add()** Method](#the-add-method)
     - [The **remove()** Method](#the-remove-method)
     - [The **removeAll()** Method](#the-removeall-method)
+    - [The **dropAny()** Method](#the-dropany-method)
     - [The **search()** Method](#the-search-method)
     - [The **clearDuplicates()** Method](#the-clearduplicates-method)
     - [The **returnDuplicates()** Method](#the-returnduplicates-method)
@@ -82,7 +83,7 @@ aroTable.returnArray(); // Returns [-4, 1, 2, 3]
 
 ### The **size()** Method
 
-The **size()** method returns the number of integers held in the AroTable:
+The **size()** method returns the amount of integers held in the AroTable:
 
 ```js
 const aroTable = new AroTable(-1,2,'3');
@@ -92,7 +93,7 @@ aroTable.size(); // Returns 3
 
 ### The **add()** Method
 
-The **add()** method, as the name suggests adds the arguments passed to it to the AroTable. Its arguments could be an integer, multiple integers, or an array, or better still a combination of both. Returns true if successful, returns false if not:
+The **add()** method, as the name suggests adds the arguments passed to it to the AroTable. Its arguments could be an integer, multiple integers, or an array, or better still a combination of both. Returns true if at least a value was added successfully, returns false if not:
 
 ```js
 const aroTable = new AroTable();
@@ -140,7 +141,7 @@ aroTable.add(1,'-2','three',-4,'5',null,7,undefined,'nine');  // returns true
 
 ### The **remove()** Method
 
-The **remove()** method takes the same kind of arguments as the [add()](#the-add-method) method and then removes an occurrence of any value—that exists in the AroTable—passed as an argument from the AroTable. Returns true if successful, returns false if not:
+The **remove()** method takes the same kind of arguments as the [add()](#the-add-method) method and then removes an occurrence of any value—that exists in the AroTable—passed as an argument from the AroTable. Returns true if at least a value was removed successfully, returns false if not:
 
 ```js
 const aroTable = new AroTable(2);
@@ -153,7 +154,7 @@ The **remove()** method can also work with strings that can be converted to a va
 
 ### The **removeAll()** Method
 
-The **removeAll()** method takes the same kind of arguments as the [add()](#the-add-method) method and removes all occurrences of any value—that exists in the AroTable—passed as an argument from the AroTable. Returns true if successful, returns false if not:
+The **removeAll()** method takes the same kind of arguments as the [add()](#the-add-method) method and removes all occurrences of any value—that exists in the AroTable—passed as an argument from the AroTable. Returns true if at least a value was removed successfully, returns false if not:
 
 ```js
 const aroTable = new AroTable(2,2,2,4,5,6,2);
@@ -165,6 +166,21 @@ aroTable.returnArray(); // Returns [4, 5, 6]
 
 The **removeAll()** method can also work with strings that can be converted to a valid integer, with the exception of **null** and empty string (**''**). See the [add()](#the-add-method) method for examples.
 
+### The **dropAny()** Method
+
+The **dropAny()** method, is a higher order method that takes in a callback function and removes all occurrences of any value in the AroTable that meets the condition specified in the callback function. Returns true if at least a value was removed successfully, returns false if not:
+
+```js
+const aroTable = new AroTable(2,2,2,4,5,6,8,2,9,1,0);
+
+aroTable.dropAny(num => num <= 2); // Returns true
+aroTable.returnArray(); // Returns [ 4, 5, 6, 8, 9 ]
+aroTable.dropAny(num => num % 2 == 0); // Returns true
+aroTable.returnArray(); // Returns [ 5, 9 ]
+aroTable.dropAny(num => num >= 10); // Returns false
+aroTable.returnArray(); // Returns [ 5, 9 ]
+```
+
 ### The **search()** Method
 
 The **search()** method takes in an integer argument. Returns an array with two values, the first is the first index the integer occurs in an array representation of the AroTable, and the second shows how many times it occurred. If no occurrence is found, returns false.
@@ -173,7 +189,7 @@ The **search()** method takes in an integer argument. Returns an array with two 
 const aroTable = new AroTable(1,3,-2,5,6,-2,6,7,3);
 
 aroTable.search(-2); // Returns [ 0, 2 ]
-aroTable.search(3); // Returns [ 3, 1 ]
+aroTable.search(3); // Returns [ 3, 2 ]
 aroTable.search(9); // Returns false
 ```
 
@@ -328,7 +344,7 @@ The AroTable data structure has zero dependencies.
 
 ## Acknowledgments
 
-I would like to express my gratitude to my senior colleague, [Mr. Ajayi Taiwo](https://github.com/ajayioyetomi) who helped me with useful technical insights as I developed the code.
+I would like to express my gratitude to my senior colleague, [Mr. Ajayi Taiwo](https://github.com/ajayioyetomi) who helped me with both useful and technical insights as I developed this project.
 
 ## Contributors
 
@@ -340,7 +356,7 @@ Made with [contrib.rocks](https://contrib.rocks).
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change or improve.
 
 ## License
 
