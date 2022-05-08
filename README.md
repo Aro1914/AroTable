@@ -35,13 +35,15 @@
 
 ## Description
 
-AroTable is a data structure that sorts itself with every manipulation made to it. It runs on the very fast [AroSort](https://github.com/Sight-Innovation/AroSort) sorting algorithm, with Big O Notation of O(n) in adding, but a Big O Notation of O(1) in removing and searching!
+AroTable is a data structure that sorts itself with every manipulation made to it. It runs on the very fast [AroSort](https://github.com/Sight-Innovation/AroSort) sorting algorithm, with a Big O Notation of O(n) in adding, but a Big O Notation of O(1) in removing and searching!
 
 Compatible with both client-side and server-side environments.
 
 ## Usage
 
 ### Client-side Only
+
+For the server-side implementation, see the [AroTable-For-Server-Side Repo](https://github.com/Aro1914/AroTable-For-Server-Side)
 
 Install the **AroTable** package with [NPM](https://www.npmjs.org/):
 
@@ -144,10 +146,13 @@ aroTable.add(1,'-2','three',-4,'5',null,7,undefined,'nine');  // returns true
 The **remove()** method takes the same kind of arguments as the [add()](#the-add-method) method and then removes an occurrence of any value—that exists in the AroTable—passed as an argument from the AroTable. Returns true if at least a value was removed successfully, returns false if not:
 
 ```js
-const aroTable = new AroTable(2);
+const aroTable = new AroTable(2,2,2,4,4,5,4,5,6,2);
 
 aroTable.remove(1); // Returns false
 aroTable.remove(2); // Returns true
+aroTable.returnArray(); // Returns [ 2, 2, 2, 4, 4, 4, 5, 5, 6 ]
+aroTable.remove(4,[5,6],'2'); // Returns true
+aroTable.returnArray(); // Returns [ 2, 2, 4, 4, 5 ]
 ```
 
 The **remove()** method can also work with strings that can be converted to a valid integer, with the exception of **null** and empty string (**''**). See the [add()](#the-add-method) method for examples.
@@ -157,18 +162,18 @@ The **remove()** method can also work with strings that can be converted to a va
 The **removeAll()** method takes the same kind of arguments as the [add()](#the-add-method) method and removes all occurrences of any value—that exists in the AroTable—passed as an argument from the AroTable. Returns true if at least a value was removed successfully, returns false if not:
 
 ```js
-const aroTable = new AroTable(2,2,2,4,5,6,2);
+const aroTable = new AroTable(2,2,2,4,4,5,4,5,6,2);
 
 aroTable.removeAll(-7); // Returns false
-aroTable.removeAll('2'); // Returns true
-aroTable.returnArray(); // Returns [4, 5, 6]
+aroTable.removeAll('2',[4,5]); // Returns true
+aroTable.returnArray(); // Returns [ 6 ]
 ```
 
 The **removeAll()** method can also work with strings that can be converted to a valid integer, with the exception of **null** and empty string (**''**). See the [add()](#the-add-method) method for examples.
 
 ### The **dropAny()** Method
 
-The **dropAny()** method, is a higher order method that takes in a callback function and removes all occurrences of any value in the AroTable that meets the condition specified in the callback function. Returns true if at least a value was removed successfully, returns false if not:
+The **dropAny()** method, is a higher-order method that takes in a callback function and removes all occurrences of any value in the AroTable that meets the condition specified in the callback function. Returns true if at least a value was removed successfully, returns false if not:
 
 ```js
 const aroTable = new AroTable(2,2,2,4,5,6,8,2,9,1,0);
