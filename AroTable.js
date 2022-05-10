@@ -19,7 +19,7 @@
 /**
  * A self-sorting integer data structure
  */
-export default class AroTable {
+ export default class AroTable {
     #pos = {};
     #neg = {};
     #negLength = 0;
@@ -105,9 +105,7 @@ export default class AroTable {
     };
 
     #insert (integer) {
-        if (!integer ||
-            integer == null ||
-            integer == undefined ||
+        if (!integer && integer != 0 ||
             isNaN(integer) ||
             integer === '') return false;
         integer = Math.round(integer);
