@@ -105,11 +105,9 @@ export default class AroTable {
     };
 
     #insert (integer) {
-        if (!integer ||
-            integer == null ||
-            integer == undefined ||
-            isNaN(integer) ||
-            integer === '') return false;
+        if (!integer && integer != 0 ||
+            integer === '' ||
+            isNaN(integer)) return false;
         integer = Math.round(integer);
         if (integer < 0)
             integer *= -1,
