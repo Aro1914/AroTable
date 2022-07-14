@@ -119,8 +119,6 @@ aroTable.add(['4']); // Returns true
 aroTable.add(['5','-6']); // Returns true
 aroTable.add(['-7','8'],'-9'); // Returns true
 aroTable.add(['10','-11'],'12','-13'); // Returns true
-aroTable.add(['10','-11'],'12','-13'); // Returns true
-aroTable.add(['10','-11'],'12','-13'); // Returns true
 aroTable.add(14,['15','-16'],'17',['-18'],19,20,-21,['22','-23',24,25,-26],27,28); // Returns true
 aroTable.add([1,2,[3,4,[5,6,[7,8]]]],9); // Returns true
 
