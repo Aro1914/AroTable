@@ -1,5 +1,5 @@
 /**
- *   Description: A self-sorting integer data structure.
+ *   Description: A self-sorting number data structure.
  * 
  *   Copyright 2022 Emmanuel Agbavwe to Present.
  *
@@ -17,21 +17,21 @@
  */
 
 /**
- * A self-sorting integer data structure
+ * A self-sorting number data structure
  */
- export default class AroTable {
+export default class AroTable {
     #pos = {};
     #neg = {};
     #negLength = 0;
     #array = [];
     #shouldArrange = false;
     /**
-     * Creates an AroTable. Works like an overloaded constructor, it could take no arguments, or it could take a single integer or multiple integers could be passed, or an array, or better still a combination of both.
-     * @param integer A value that can be converted to a valid integer
-     * @param integers Values that can be converted to valid integers. They could be multiple integers, an array, nested arrays, or a combination of both.
+     * Creates an AroTable. Works like an overloaded constructor, it could take no arguments, or it could take a single number or multiple numbers could be passed, or an array, or better still a combination of both.
+     * @param number A value that can be converted to a valid number
+     * @param numbers Values that can be converted to valid numbers. They could be multiple numbers, an array, nested arrays, or a combination of both.
      */
-    constructor(integer = null, ...integers) {
-        this.add(integer, ...integers);
+    constructor (number = null, ...numbers) {
+        this.add(number, ...numbers);
     }
 
     #mergeSort (array) {
@@ -48,11 +48,11 @@
             sorted_values = [];
 
         while (left_index < left_length && right_index < right_length)
-            left_values[left_index] < right_values[right_index] ?
-                (sorted_values.push(left_values[left_index]),
+            Number(left_values[left_index]) < Number(right_values[right_index]) ?
+                (sorted_values.push(Number(left_values[left_index])),
                     left_index++)
                 :
-                (sorted_values.push(right_values[right_index]),
+                (sorted_values.push(Number(right_values[right_index])),
                     right_index++);
 
         sorted_values = sorted_values.concat(left_values.slice(left_index)),
@@ -66,70 +66,111 @@
         this.#array = [];
         if (this.#negLength) {
             let tempNegLength = this.#negLength;
+
             for (const numValue in this.#neg) {
                 if (isNaN(numValue)) continue;
-                const num = Number(numValue) * -1, negOc = this.#neg[numValue][1];
+                const num = Number(numValue) * -1, negOc = this.#neg[numValue][2];
                 tempNegLength -= negOc;
                 this.#neg[numValue][0] = tempNegLength;
-                if (this.#neg[numValue][1] > 1) {
-                    let i = 0;
-                    for (i; i < this.#neg[numValue][1]; i++)
-                        this.#array[this.#negLength - counter] = num,
-                            counter++;
+                if (this.#neg[numValue][2] > 1) {
+                    const keys = this.#mergeSort(Object.keys(this.#neg[numValue][1]));
+                    let x = keys.length - 1;
+                    for (x; x >= 0; x--) {
+                        const oc = this.#neg[numValue][1][String(keys[x])][1];
+                        this.#neg[numValue][1][String(keys[x])][0] = this.#negLength - counter;
+                        let i = oc;
+                        for (i; i > 0; i--)
+                            this.#array[this.#negLength - counter] = num + Number(keys[x]),
+                                counter++;
+                    }
                 }
-                else if (this.#neg[numValue][1] == 1)
-                    this.#array[this.#negLength - counter] = num,
-                        counter++;
+                else if (this.#neg[numValue][2] == 1) {
+                    const key = (() => {
+                        for (const x in this.#neg[numValue][1])
+                            if (this.#neg[numValue][1][x][1] == 1)
+                                return Number(x);
+                    })();
+                    this.#neg[numValue][1][String(key)][0] = tempNegLength;
+                    this.#array[this.#negLength - counter] = num + key;
+                    counter++;
+                }
                 else continue;
             }
+
         }
 
         if (Object.keys(this.#pos).length) {
             let posPosition = this.#negLength;
+
             for (const numValue in this.#pos) {
                 if (isNaN(numValue)) continue;
                 const num = Number(numValue);
                 this.#pos[numValue][0] = posPosition;
-                if (this.#pos[numValue][1] > 1) {
-                    let i = 0;
-                    for (i; i < this.#pos[numValue][1]; i++)
-                        this.#array[posPosition] = num,
-                            posPosition++;
+                if (this.#pos[numValue][2] > 1) {
+                    const keys = this.#mergeSort(Object.keys(this.#pos[numValue][1]));
+                    let x = 0;
+                    for (x; x < keys.length; x++) {
+                        const oc = this.#pos[numValue][1][String(keys[x])][1];
+                        this.#pos[numValue][1][String(keys[x])][0] = posPosition;
+                        let i = 0;
+                        for (i; i < oc; i++)
+                            this.#array[posPosition] = num + Number(keys[x]),
+                                posPosition++;
+                    }
                 }
-                else if (this.#pos[numValue][1] == 1)
-                    this.#array[posPosition] = num,
+                else if (this.#pos[numValue][2] == 1) {
+                    const key = (() => {
+                        for (const x in this.#pos[numValue][1])
+                            if (this.#pos[numValue][1][x][1] == 1)
+                                return Number(x);
+                    })();
+                    this.#pos[numValue][1][String(key)][0] = posPosition;
+                    this.#array[posPosition] = num + key,
                         posPosition++;
+                }
                 else continue;
             }
+
         }
     };
 
-    #insert (integer) {
-        if (!integer && integer != 0 ||
-            isNaN(integer) ||
-            integer === '') return false;
-        integer = Math.round(integer);
-        if (integer < 0)
-            integer *= -1,
-                this.#neg[integer]?.[1] ?
-                    this.#neg[integer][1]++ :
-                    this.#neg[integer] = [null, 1],
-                this.#negLength++;
-        else
-            this.#pos[integer]?.[1] ?
-                this.#pos[integer][1]++ :
-                this.#pos[integer] = [null, 1];
+    #insert (number) {
+        if (!number && number !== 0 ||
+            isNaN(number) ||
+            number === '') return false;
+
+        const dp = +(Math.round(number % 1 + 'e+3') + 'e-3');
+        const whole = number - (number % 1);
+        if (number < 0) {
+            const nWhole = whole * -1;
+            if (!this.#neg[nWhole]) {
+                this.#neg[nWhole] = [null, {}, 1];
+                this.#neg[nWhole][1][dp] = [null, 1];
+            } else {
+                this.#neg[nWhole][1][dp] ? this.#neg[nWhole][1][dp][1]++ : this.#neg[nWhole][1][dp] = [null, 1];
+                this.#neg[nWhole][2]++;
+            }
+            this.#negLength++;
+        } else {
+            if (!this.#pos[whole]) {
+                this.#pos[whole] = [null, {}, 1];
+                this.#pos[whole][1][dp] = [null, 1];
+            } else {
+                this.#pos[whole][1][dp] ? this.#pos[whole][1][dp][1]++ : this.#pos[whole][1][dp] = [null, 1];
+                this.#pos[whole][2]++;
+            }
+        }
         return;
     }
 
-    #insertArray (integers) {
-        if (integers == null ||
-            integers == undefined ||
-            !integers.length ||
-            !Array.isArray(integers)) return false;
+    #insertArray (numbers) {
+        if (numbers == null ||
+            numbers == undefined ||
+            !numbers.length ||
+            !Array.isArray(numbers)) return false;
         let index = 0;
-        for (index; index < integers.length; index++) {
-            let element = integers[index];
+        for (index; index < numbers.length; index++) {
+            let element = numbers[index];
             Array.isArray(element) ?
                 this.#insertArray(element) :
                 this.#insert(element);
@@ -137,45 +178,48 @@
         return;
     }
 
-    #enforceRemove (integer = null, ...integers) {
-        if (integers) {
+    #enforceRemove (number = null, ...numbers) {
+        if (numbers) {
             let i = 0;
-            for (i; i < integers.length; i++)
-                this.#enforceRemove(integers[i]);
+            for (i; i < numbers.length; i++)
+                this.#enforceRemove(numbers[i]);
         }
-        if (Array.isArray(integer)) {
+        if (Array.isArray(number)) {
             let i = 0;
-            for (i; i < integer.length; i++)
-                this.#enforceRemove(integer[i]);
+            for (i; i < number.length; i++)
+                this.#enforceRemove(number[i]);
         }
-        else if (this.search(integer)[1]) {
-            if (Number(integer) < 0)
-                this.#neg[Number(integer * -1)][1]--,
+        else if (this.search(number)[1]) {
+            const dp = +(Math.round(number % 1 + 'e+3') + 'e-3'), whole = number - (number % 1);
+            if (Number(number) < 0)
+                this.#neg[Number(whole * -1)][2]--,
+                    this.#neg[Number(whole * -1)][1][dp][1]--,
                     this.#negLength--;
             else
-                this.#pos[Number(integer)][1]--;
+                this.#pos[Number(whole)][2]--,
+                    this.#pos[Number(whole)][1][dp][1]--;
             this.#shouldArrange = true;
         }
         return;
     }
 
-    #enforceRemoveAll (integer = null, ...integers) {
-        if (integers) {
+    #enforceRemoveAll (number = null, ...numbers) {
+        if (numbers) {
             let i = 0;
-            for (i; i < integers.length; i++)
-                this.#enforceRemoveAll(integers[i]);
+            for (i; i < numbers.length; i++)
+                this.#enforceRemoveAll(numbers[i]);
         }
-        if (Array.isArray(integer)) {
+        if (Array.isArray(number)) {
             let i = 0;
-            for (i; i < integer.length; i++)
-                this.#enforceRemoveAll(integer[i]);
+            for (i; i < number.length; i++)
+                this.#enforceRemoveAll(number[i]);
         }
-        else if (this.search(integer)[1]) {
-            if (Number(integer) < 0)
-                this.#negLength -= this.#neg[Number(integer * -1)][1],
-                    this.#neg[Number(integer * -1)][1] = 0;
+        else if (this.search(number)[1]) {
+            if (Number(number) < 0)
+                this.#negLength -= this.#neg[Number(number * -1)][1],
+                    this.#neg[Number(number * -1)][1] = 0;
             else
-                this.#pos[Number(integer)][1] = 0;
+                this.#pos[Number(number)][1] = 0;
             this.#shouldArrange = true;
         }
         return;
@@ -183,61 +227,74 @@
 
     /**
      * Adds the given arguments to the AroTable.
-     * @param integer A value that can be converted to a valid integer
-     * @param integers Values that can be converted to valid integers. They could be in an array, nested arrays, or a combination of both.
+     * @param number A value that can be converted to a valid number
+     * @param numbers Values that can be converted to valid numbers. They could be in an array, nested arrays, or a combination of both.
      * @returns True if successful, returns false if not.
      */
-    add (integer = null, ...integers) {
+    add (number = null, ...numbers) {
         const previousLength = this.#array.length;
-        integers &&
-            this.#insertArray(integers);
-        Array.isArray(integer) ?
-            this.#insertArray(integer) : integer && this.#insert(integer);
+        numbers &&
+            this.#insertArray(numbers);
+        Array.isArray(number) ?
+            this.#insertArray(number) : number && this.#insert(number);
         this.#arrange();
         return previousLength != this.#array.length;
     }
 
     /**
      * Searches for an occurrence of the given value in the AroTable.
-     * @param integer A value that can be converted to a valid integer
-     * @returns {Array<Number>} An array with two values, the first is the first index the integer occurred in the AroTable, and the second shows how many times it occurred. If no occurrence is found, returns false.
+     * @param number A value that can be converted to a valid number
+     * @returns {Array<Number>} An array with two values, the first is the first index the number occurred in the AroTable, and the second shows how many times it occurred. If no occurrence is found, returns false.
      */
-    search (integer) {
-        if (integer == null ||
-            integer == undefined ||
-            isNaN(integer)) return false;
-        return integer < 1 ? !this.#neg[integer * -1]?.[1] ? false : this.#neg[integer * -1] : !this.#pos[integer]?.[1] ? false : this.#pos[integer];
+    search (number) {
+        if (number == null ||
+            number == undefined ||
+            isNaN(number)) return false;
+        const dp = +(Math.round(number % 1 + 'e+3') + 'e-3'), whole = number - (number % 1);
+        if (Number(number) < 0) {
+            const nWhole = whole * -1;
+            if (this.#neg[nWhole]?.[2])
+                if (this.#neg[nWhole][1]?.[dp])
+                    if (this.#neg[nWhole][1][dp][1])
+                        return this.#neg[nWhole][1][dp];
+        }
+        else
+            if (this.#pos[whole]?.[2])
+                if (this.#pos[whole][1]?.[dp])
+                    if (this.#pos[whole][1][dp][1])
+                        return this.#pos[whole][1][dp];
+        return false;
     }
 
     /**
      * Deletes the an occurrence of the given argument(s) from the AroTable.
-     * @param integer A value that can be converted to a valid integer
-     * @param integers Values that can be converted to valid integers. They could be in an array, nested arrays, or a combination of both.
+     * @param number A value that can be converted to a valid number
+     * @param numbers Values that can be converted to valid numbers. They could be in an array, nested arrays, or a combination of both.
      * @returns True if successful, returns false if not.
      */
-    remove (integer = null, ...integers) {
+    remove (number = null, ...numbers) {
         const previousLength = this.#array.length;
-        this.#enforceRemove(integer, ...integers);
+        this.#enforceRemove(number, ...numbers);
         this.#shouldArrange && (this.#arrange(), this.#shouldArrange = false);
         return previousLength != this.#array.length;
     }
 
     /**
      * Deletes all occurrences of the given argument(s) from the AroTable.
-     * @param integer A value that can be converted to a valid integer
-     * @param integers Values that can be converted to valid integers. They could be in an array, nested arrays, or a combination of both.
+     * @param number A value that can be converted to a valid number
+     * @param numbers Values that can be converted to valid numbers. They could be in an array, nested arrays, or a combination of both.
      * @returns True if successful, returns false if not.
      */
-    removeAll (integer = null, ...integers) {
+    removeAll (number = null, ...numbers) {
         const previousLength = this.#array.length;
-        this.#enforceRemoveAll(integer, ...integers);
+        this.#enforceRemoveAll(number, ...numbers);
         this.#shouldArrange && (this.#arrange(), this.#shouldArrange = true);
         return previousLength != this.#array.length;
     }
 
     /**
      * Removes all occurrences of any value in the AroTable that meets the condition specified in a callback function.
-     * @param {Function} qualifier A function that takes the desired value to be evaluated. The dropAny method calls the qualifier function once for each integer in the AroTable. 
+     * @param {Function} qualifier A function that takes the desired value to be evaluated. The dropAny method calls the qualifier function once for each number in the AroTable. 
      * @returns True if successful, returns false if not.
      */
     dropAny (qualifier) {
@@ -273,7 +330,7 @@
     }
 
     /**
-     * Removes all positive integers from the AroTable.
+     * Removes all positive numbers from the AroTable.
      * @returns True if successful, returns false if not.
      */
     dropPositives () {
@@ -284,7 +341,7 @@
     }
 
     /**
-     * Removes all negative integers from the AroTable. 
+     * Removes all negative numbers from the AroTable. 
      * @returns True if successful, returns false if not.
      */
     dropNegatives () {
@@ -296,7 +353,7 @@
     }
 
     /**
-     * Removes all integers with a single occurrence from the AroTable. 
+     * Removes all numbers with a single occurrence from the AroTable. 
      * @returns True if successful, returns false if not.
      */
     dropUnits () {
@@ -313,7 +370,7 @@
     }
 
     /**
-     * Removes all integers with multiple occurrences from the AroTable. 
+     * Removes all numbers with multiple occurrences from the AroTable. 
      * @returns True if successful, returns false if not.
      */
     dropDuplicates () {
@@ -348,7 +405,7 @@
 
 
     /**
-     * @returns {Array<Number>} A sorted array of all integers with duplicated occurrences in the AroTable, if none exists, returns false.
+     * @returns {Array<Number>} A sorted array of all numbers with duplicated occurrences in the AroTable, if none exists, returns false.
      */
     returnDuplicates () {
         const duplicates = [];
@@ -365,7 +422,7 @@
     }
 
     /**
-     * @returns {Array<Number>} A sorted array of all integers with a single occurrence in the AroTable, if none exists, returns false.
+     * @returns {Array<Number>} A sorted array of all numbers with a single occurrence in the AroTable, if none exists, returns false.
      */
     returnUnits () {
         const units = [];
@@ -382,7 +439,7 @@
     }
 
     /**
-     * @returns {Array<Number>} A sorted array of all negative integers in the AroTable, if none exists, returns false.
+     * @returns {Array<Number>} A sorted array of all negative numbers in the AroTable, if none exists, returns false.
      */
     returnNegatives () {
         const negatives = [];
@@ -395,7 +452,7 @@
     }
 
     /**
-     * @returns {Array<Number>} A sorted array of all positive integers in the AroTable, if none exists returns false.
+     * @returns {Array<Number>} A sorted array of all positive numbers in the AroTable, if none exists returns false.
      */
     returnPositives () {
         const positives = [];
@@ -415,14 +472,14 @@
     }
 
     /**
-     * @returns {Number} The amount of integers held in the AroTable.
+     * @returns {Number} The amount of numbers held in the AroTable.
      */
     size () {
         return this.#array.length;
     }
 
     /**
-     * @returns An object showing the distribution of integers in the AroTable.
+     * @returns An object showing the distribution of numbers in the AroTable.
      */
     getDistribution () {
         return {
