@@ -35,7 +35,7 @@
 
 ## Description
 
-AroTable is a number data structure capable of sorting itself on any manipulation that calls for the internal structure to be updated. Running on two powerful sorting algorithms—[AroSort](https://github.com/Sight-Innovation/AroSort) and MergeSort, with [AroSort](https://github.com/Sight-Innovation/AroSort) sorting the integer portions of numbers stored in the AroTable, while MergeSort sorts the decimal portions—AroTable boosts a Big O Notation for time complexity of O(n) in adding and removing, and an amazing O(1) in searching!
+AroTable is a number data structure capable of sorting itself on any manipulation that calls for the internal structure to be updated. Running on two powerful sorting algorithms—[AroSort](https://github.com/Sight-Innovation/AroSort) and MergeSort, with [AroSort](https://github.com/Sight-Innovation/AroSort) sorting the integer portions of numbers stored in the AroTable, while MergeSort sorts the decimal portions—AroTable boasts a Big O Notation for time complexity of O(n) in adding and removing, and an amazing O(1) in searching!
 
 Compatible with both client-side and server-side environments.
 
