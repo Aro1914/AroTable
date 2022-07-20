@@ -1,7 +1,7 @@
 {
   "name": "arotable",
   "version": "4.1.1",
-  "description": "A self-sorting integer data structure.",
+  "description": "A self-sorting number data structure.",
   "main": "AroTable.js",
   "scripts": {
     "test": "echo \"No test specified\""
