@@ -138,7 +138,7 @@ export default class AroTable {
         if (!number && number !== 0 ||
             isNaN(number) ||
             number === '') return false;
-
+        number = Number(number);
         const dp = +(Math.round(number % 1 + 'e+3') + 'e-3');
         const whole = number - (number % 1);
         if (number < 0) {
@@ -214,12 +214,21 @@ export default class AroTable {
             for (i; i < number.length; i++)
                 this.#enforceRemoveAll(number[i]);
         }
-        else if (this.search(number)[1]) {
-            if (Number(number) < 0)
-                this.#negLength -= this.#neg[Number(number * -1)][1],
-                    this.#neg[Number(number * -1)][1] = 0;
-            else
-                this.#pos[Number(number)][1] = 0;
+        else if (this.search(number)) {
+            number = Number(number);
+            const dp = +(Math.round(number % 1 + 'e+3') + 'e-3');
+            const whole = number - (number % 1);
+            if (number < 0) {
+                const oc = this.#neg[Number(whole * -1)][1][dp][1];
+                this.#neg[Number(whole * -1)][1][dp][1] = 0,
+                    this.#neg[Number(whole * -1)][2] -= oc,
+                    this.#negLength -= oc;
+            }
+            else {
+                const oc = this.#pos[Number(whole)][1][dp][1];
+                this.#pos[Number(whole)][1][dp][1] = 0,
+                    this.#pos[Number(whole)][2] -= oc;
+            }
             this.#shouldArrange = true;
         }
         return;
@@ -299,14 +308,21 @@ export default class AroTable {
      */
     dropAny (qualifier) {
         const previousLength = this.#array.length;
-        for (const numValue in this.#neg) {
-            const num = numValue * -1;
-            if (qualifier(num))
-                this.#enforceRemoveAll(num);
-        }
+        for (const numValue in this.#neg)
+            for (const dp in this.#neg[numValue][1]) {
+                const num = ((Number(numValue) - Number(dp))) * -1;
+                if (qualifier(num))
+                    this.#enforceRemoveAll(num);
+
+            }
+
         for (const numValue in this.#pos)
-            if (qualifier(numValue))
-                this.#enforceRemoveAll(numValue);
+            for (const dp in this.#pos[numValue][1]) {
+                const num = (Number(numValue) + Number(dp));
+                if (qualifier(num))
+                    this.#enforceRemoveAll(num);
+
+            }
         this.#shouldArrange && (this.#arrange(), this.#shouldArrange = true);
         return previousLength != this.#array.length;
     }
