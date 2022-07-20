@@ -35,7 +35,7 @@
 
 ## Description
 
-AroTable is a data structure that sorts itself with every manipulation made to it. It runs on the very fast [AroSort](https://github.com/Sight-Innovation/AroSort) sorting algorithm, with a Big O Notation of O(n) in adding, but a Big O Notation of O(1) in removing and searching!
+AroTable is a data structure that sorts itself with every manipulation made to it. It runs on the very fast [AroSort](https://github.com/Sight-Innovation/AroSort) sorting algorithm, with a Big O Notation of O(n) in adding and removing, but a Big O Notation of O(1) in searching!
 
 Compatible with both client-side and server-side environments.
 
@@ -118,8 +118,6 @@ aroTable.add('-2','3'); // Returns true
 aroTable.add(['4']); // Returns true
 aroTable.add(['5','-6']); // Returns true
 aroTable.add(['-7','8'],'-9'); // Returns true
-aroTable.add(['10','-11'],'12','-13'); // Returns true
-aroTable.add(['10','-11'],'12','-13'); // Returns true
 aroTable.add(['10','-11'],'12','-13'); // Returns true
 aroTable.add(14,['15','-16'],'17',['-18'],19,20,-21,['22','-23',24,25,-26],27,28); // Returns true
 aroTable.add([1,2,[3,4,[5,6,[7,8]]]],9); // Returns true
