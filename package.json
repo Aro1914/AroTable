@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/Aro1914/AroTable/issues"
   },
-  "homepage": "https://github.com/Aro1914/AroTable#readme"
+  "homepage": "https://github.com/Aro1914/AroTable#readme",
+  "dependencies": {
+    "np": "^7.6.2"
+  }
 }

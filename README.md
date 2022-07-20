@@ -28,7 +28,6 @@
     - [The **getDistribution()** Method](#the-getdistribution-method)
     - [The **empty()** Method](#the-empty-method)
     - [The **isEmpty()** Method](#the-isempty-method)
-  - [Requirements](#requirements)
   - [Acknowledgments](#acknowledgments)
   - [Contributors](#contributors)
   - [Contributing](#contributing)
@@ -355,10 +354,6 @@ aroTable.isEmpty(); // Returns false
 aroTable.empty();
 aroTable.isEmpty() // Returns true
 ```
-
-## Requirements
-
-The AroTable data structure has zero dependencies.
 
 ## Acknowledgments
 
