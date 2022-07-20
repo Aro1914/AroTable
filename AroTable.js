@@ -334,7 +334,7 @@ export default class AroTable {
     /**
      * Returns any value in the AroTable that meets the condition specified in a callback function.
      * @param {Function} qualifier A function that takes the desired value to be evaluated. The returnAny method calls the qualifier function once for each number in the AroTable. 
-     * @returns True if successful, returns false if not.
+     * @returns True if at least one matching value is found, returns false if not.
      */
     returnAny (qualifier) {
         const returnArray = [];

@@ -14,6 +14,7 @@
     - [The **remove()** Method](#the-remove-method)
     - [The **removeAll()** Method](#the-removeall-method)
     - [The **dropAny()** Method](#the-dropany-method)
+    - [The **returnAny()** Method](#the-returnany-method)
     - [The **search()** Method](#the-search-method)
     - [The **clearDuplicates()** Method](#the-clearduplicates-method)
     - [The **returnDuplicates()** Method](#the-returnduplicates-method)
@@ -35,7 +36,7 @@
 
 ## Description
 
-AroTable is a data structure that sorts itself with every manipulation made to it. It runs on the very fast [AroSort](https://github.com/Sight-Innovation/AroSort) sorting algorithm, with a Big O Notation of O(n) in adding and removing, but a Big O Notation of O(1) in searching!
+AroTable is a number data structure capable of sorting itself on any manipulation that calls for the internal structure to be updated. Running on two powerful sorting algorithms—[AroSort](https://github.com/Sight-Innovation/AroSort) and MergeSort, with [AroSort](https://github.com/Sight-Innovation/AroSort) sorting the integer portions of numbers stored in the AroTable, while MergeSort sorts the decimal portions—AroTable boosts a Big O Notation for time complexity of O(n) in adding and removing, and an amazing O(1) in searching!
 
 Compatible with both client-side and server-side environments.
 
@@ -70,6 +71,8 @@ const aroTable = new AroTable();
 ```
 
 The AroTable constructor works like an overloaded constructor, it could be giving no arguments or it could be given the same kind of arguments as the [add()](#the-add-method) method.
+
+> **_Note_**: The maximum number of decimal places for numbers stored in the AroTable is 3
 
 ## Methods
 
@@ -182,6 +185,18 @@ aroTable.dropAny(num => num % 2 == 0); // Returns true
 aroTable.returnArray(); // Returns [ 5, 9 ]
 aroTable.dropAny(num => num >= 10); // Returns false
 aroTable.returnArray(); // Returns [ 5, 9 ]
+```
+
+### The **returnAny()** Method
+
+The **returnAny()** method, is a higher-order method that takes in a callback function and returns any value in the AroTable that meets the condition specified in the callback function. Returns true if at least a value meets the condition, returns false if not:
+
+```js
+const aroTable = new AroTable(2,2,2,4,5,6,8,2,9,1,0);
+
+aroTable.returnAny(num => num <= 2); // Returns [ 0, 1, 2 ]
+aroTable.returnAny(num => num % 2 == 0); // Returns [ 0, 2, 4, 6, 8 ]
+aroTable.returnAny(num => num >= 10); // Returns false
 ```
 
 ### The **search()** Method
