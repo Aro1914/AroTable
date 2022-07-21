@@ -61,13 +61,45 @@ export default class AroTable {
         return sorted_values;
     };
 
+    #trimNum (el) {
+        let strDp = String(+(Math.round(el % 1 + 'e+3') + 'e-3'));
+        el > 0 ?
+            (strDp.length > 5) &&
+            ((strDp[4] === strDp[5]) ?
+                strDp = strDp.substring(0, 5)
+                :
+                (strDp[5] > 4) &&
+                (strDp[4] = strDp[4] + 1),
+                strDp = strDp.substring(0, 5)) :
+            (strDp.length > 6) &&
+            ((strDp[5] === strDp[6]) ?
+                strDp = strDp.substring(0, 6)
+                :
+                (strDp[6] > 4) &&
+                (strDp[5] = strDp[5] + 1),
+                strDp = strDp.substring(0, 6));
+        let str = String((el - (el % 1)) + Number(strDp.substring(0, el < 0 ? 2 : 1)));
+        str += el > 0 ? strDp.substring(1, 5) : strDp.substring(2, 6);
+        return el < 0 && (el - (el % 1)) == 0 ? Number(str) * -1 : Number(str);
+    }
+
+    #returnParts (el) {
+        const dp = this.#trimNum(el % 1);
+        return dp == 1 ? [(el - (el % 1)) + (el > 0 ? dp : dp * -1), 0] : [this.#trimNum(el) - dp, dp];
+    }
+
+    #returnInputParts (number) {
+        return [number - (number % 1), number % 1 != 0 ? Number(`${number < 0 ? '-0' : '0'}.` + String(number).split('.')[1]) : (number % 1)];
+    }
+
     #arrange () {
         let counter = 1;
         this.#array = [];
         if (this.#negLength) {
-            let tempNegLength = this.#negLength;
-
-            for (const numValue in this.#neg) {
+            const neg = Object.keys(this.#neg), len = neg.length;
+            let tempNegLength = this.#negLength, n = 0;
+            for (n; n < len; n++) {
+                const numValue = neg[n];
                 if (isNaN(numValue)) continue;
                 const num = Number(numValue) * -1, negOc = this.#neg[numValue][2];
                 tempNegLength -= negOc;
@@ -83,7 +115,7 @@ export default class AroTable {
                         let i = oc;
 
                         for (i; i > 0; i--)
-                            this.#array[this.#negLength - counter] = num + Number(keys[x]),
+                            this.#array[this.#negLength - counter] = this.#trimNum(num + Number(keys[x])),
                                 counter++;
                     }
                 }
@@ -95,17 +127,20 @@ export default class AroTable {
                     })();
 
                     this.#neg[numValue][1][String(key)][0] = tempNegLength,
-                        this.#array[this.#negLength - counter] = num + key,
+                        this.#array[this.#negLength - counter] = this.#trimNum(num + key),
                         counter++;
                 }
                 else continue;
             }
         }
 
-        if (Object.keys(this.#pos).length) {
-            let posPosition = this.#negLength;
 
-            for (const numValue in this.#pos) {
+
+        const pos = Object.keys(this.#pos), len = pos.length;
+        if (len) {
+            let posPosition = this.#negLength, p = 0;
+            for (p; p < len; p++) {
+                const numValue = pos[p];
                 if (isNaN(numValue)) continue;
                 const num = Number(numValue);
                 this.#pos[numValue][0] = posPosition;
@@ -120,7 +155,7 @@ export default class AroTable {
                         let i = 0;
 
                         for (i; i < oc; i++)
-                            this.#array[posPosition] = num + Number(keys[x]),
+                            this.#array[posPosition] = this.#trimNum(num + Number(keys[x])),
                                 posPosition++;
                     }
                 }
@@ -132,7 +167,7 @@ export default class AroTable {
                     })();
 
                     this.#pos[numValue][1][String(key)][0] = posPosition,
-                        this.#array[posPosition] = num + key,
+                        this.#array[posPosition] = this.#trimNum(num + key),
                         posPosition++;
                 }
                 else continue;
@@ -145,8 +180,7 @@ export default class AroTable {
             isNaN(number) ||
             number === '') return false;
         number = Number(number);
-        const dp = +(Math.round(number % 1 + 'e+3') + 'e-3');
-        const whole = number - (number % 1);
+        const [whole, dp] = this.#returnParts(number);
         if (number < 0) {
             const nWhole = whole * -1;
             if (!this.#neg[nWhole])
@@ -194,7 +228,7 @@ export default class AroTable {
                 this.#enforceRemove(number[i]);
         }
         else if (this.search(number)) {
-            const dp = +(Math.round(number % 1 + 'e+3') + 'e-3'), whole = number - (number % 1);
+            const [whole, dp] = this.#returnParts(number);
             if (Number(number) < 0)
                 this.#neg[Number(whole * -1)][2]--,
                     this.#neg[Number(whole * -1)][1][dp][1]--,
@@ -220,8 +254,7 @@ export default class AroTable {
         }
         else if (this.search(number)) {
             number = Number(number);
-            const dp = +(Math.round(number % 1 + 'e+3') + 'e-3');
-            const whole = number - (number % 1);
+            const [whole, dp] = this.#returnParts(number);
             if (number < 0) {
                 const oc = this.#neg[Number(whole * -1)][1][dp][1];
                 this.#neg[Number(whole * -1)][1][dp][1] = 0,
@@ -263,7 +296,7 @@ export default class AroTable {
         if (number == null ||
             number == undefined ||
             isNaN(number)) return false;
-        const dp = +(Math.round(number % 1 + 'e+3') + 'e-3'), whole = number - (number % 1);
+        const [whole, dp] = this.#returnInputParts(number);
         if (Number(number) < 0) {
             const nWhole = whole * -1;
             if (this.#neg[nWhole]?.[2])
@@ -315,7 +348,7 @@ export default class AroTable {
         for (const numValue in this.#neg)
             if (this.#neg[numValue][2])
                 for (const dp in this.#neg[numValue][1]) {
-                    const num = ((Number(numValue) - Number(dp))) * -1;
+                    const num = this.#trimNum((Number(numValue) - Number(dp))) * -1;
                     if (qualifier(num))
                         this.#enforceRemoveAll(num);
                 }
@@ -323,7 +356,7 @@ export default class AroTable {
         for (const numValue in this.#pos)
             if (this.#pos[numValue][2])
                 for (const dp in this.#pos[numValue][1]) {
-                    const num = (Number(numValue) + Number(dp));
+                    const num = this.#trimNum(Number(numValue) + Number(dp));
                     if (qualifier(num))
                         this.#enforceRemoveAll(num);
                 }
@@ -342,7 +375,7 @@ export default class AroTable {
         for (const numValue in this.#neg)
             if (this.#neg[numValue][2])
                 for (const dp in this.#neg[numValue][1]) {
-                    const num = ((Number(numValue) - Number(dp))) * -1;
+                    const num = this.#trimNum((Number(numValue) - Number(dp))) * -1;
                     if (qualifier(num))
                         returnArray[index] = num, index++;
                 }
@@ -350,7 +383,7 @@ export default class AroTable {
         for (const numValue in this.#pos)
             if (this.#pos[numValue][2])
                 for (const dp in this.#pos[numValue][1]) {
-                    const num = (Number(numValue) + Number(dp));
+                    const num = this.#trimNum(Number(numValue) + Number(dp));
                     if (qualifier(num))
                         returnArray[index] = num, index++;
                 }
@@ -481,14 +514,14 @@ export default class AroTable {
             if (this.#neg[int][2] > 1)
                 for (const dp in this.#neg[int][1])
                     if (this.#neg[int][1][dp][1] > 1)
-                        duplicates[index] = (Number(int) * -1) + Number(dp),
+                        duplicates[index] = this.#trimNum((Number(int) * -1) + Number(dp)),
                             index++;
 
         for (const int in this.#pos)
             if (this.#pos[int][2] > 1)
                 for (const dp in this.#pos[int][1])
                     if (this.#pos[int][1][dp][1] > 1)
-                        duplicates[index] = Number(int) + Number(dp),
+                        duplicates[index] = this.#trimNum(Number(int) + Number(dp)),
                             index++;
         return duplicates.length > 0 ? this.#mergeSort(duplicates) : false;
     }
@@ -503,14 +536,14 @@ export default class AroTable {
             if (this.#neg[int][2])
                 for (const dp in this.#neg[int][1])
                     if (this.#neg[int][1][dp][1] == 1)
-                        units[index] = (Number(int) * -1) + Number(dp),
+                        units[index] = this.#trimNum((Number(int) * -1) + Number(dp)),
                             index++;
 
         for (const int in this.#pos)
             if (this.#pos[int][2])
                 for (const dp in this.#pos[int][1])
                     if (this.#pos[int][1][dp][1] == 1)
-                        units[index] = Number(int) + Number(dp),
+                        units[index] = this.#trimNum(Number(int) + Number(dp)),
                             index++;
         return units.length > 0 ? this.#mergeSort(units) : false;
     }
@@ -525,7 +558,7 @@ export default class AroTable {
             if (this.#neg[neg][2])
                 for (const dp in this.#neg[neg][1])
                     if (this.#neg[neg][1][dp][1] != 0)
-                        negatives[index] = (Number(neg) * -1) + Number(dp),
+                        negatives[index] = this.#trimNum((Number(neg) * -1) + Number(dp)),
                             index++;
         return negatives.length > 0 ? this.#mergeSort(negatives) : false;
     }
@@ -540,7 +573,7 @@ export default class AroTable {
             if (this.#pos[pos][2])
                 for (const dp in this.#pos[pos][1])
                     if (this.#pos[pos][1][dp][1] != 0)
-                        positives[index] = Number(pos) + Number(dp),
+                        positives[index] = this.#trimNum(Number(pos) + Number(dp)),
                             index++;
         return positives.length > 0 ? this.#mergeSort(positives) : false;
     }
@@ -564,8 +597,8 @@ export default class AroTable {
      */
     getDistribution () {
         return {
-            'Positive Integers': Number(this.#array.length - this.#negLength),
-            'Negative Integers': Number(this.#negLength)
+            'Positive Numbers': Number(this.#array.length - this.#negLength),
+            'Negative Numbers': Number(this.#negLength)
         };
     }
 }
