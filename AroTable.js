@@ -353,21 +353,39 @@ export default class AroTable {
      */
     dropAny (qualifier) {
         const previousLength = this.#negLength + this.#posLength;
-        for (const numValue in this.#neg)
-            if (this.#neg[numValue][2])
-                for (const dp in this.#neg[numValue][1]) {
-                    const num = this.#trimNum((Number(numValue) - Number(dp))) * -1;
-                    if (qualifier(num))
-                        this.#enforceRemoveAll(num);
-                }
 
-        for (const numValue in this.#pos)
-            if (this.#pos[numValue][2])
-                for (const dp in this.#pos[numValue][1]) {
-                    const num = this.#trimNum(Number(numValue) + Number(dp));
-                    if (qualifier(num))
+        const neg = Object.keys(this.#neg), nLen = neg.length;
+        let n = nLen - 1;
+        for (n; n >= 0; n--) {
+            const numValue = neg[n];
+            if (this.#neg[numValue][2]) {
+                const negObj = this.#mergeSort(Object.keys(this.#neg[numValue][1])), lenObj = negObj.length;
+                let nObj = lenObj - 1;
+                for (nObj; nObj >= 0; nObj--) {
+                    const dp = negObj[nObj];
+                    const num = this.#trimNum((Number(numValue) - Number(dp))) * -1;
+                    if (this.#neg[numValue][1][dp][1] && qualifier(num))
                         this.#enforceRemoveAll(num);
                 }
+            }
+        }
+
+        const pos = Object.keys(this.#pos), pLen = pos.length;
+        let p = 0;
+        for (p; p < pLen; p++) {
+            const numValue = pos[p];
+            if (this.#pos[numValue][2]) {
+                const posObj = this.#mergeSort(Object.keys(this.#pos[numValue][1])), lenObj = posObj.length;
+                let pObj = 0;
+                for (pObj; pObj < lenObj; pObj++) {
+                    const dp = posObj[pObj];
+                    const num = this.#trimNum((Number(numValue) + Number(dp)));
+                    if (this.#pos[numValue][1][dp][1] && qualifier(num))
+                        this.#enforceRemoveAll(num);
+                }
+            }
+        }
+
         this.#shouldArrange && (this.#arrange(), this.#shouldArrange = true);
         return previousLength != this.#negLength + this.#posLength;
     }
@@ -508,21 +526,41 @@ export default class AroTable {
      */
     dropDuplicates () {
         const previousLength = this.#negLength + this.#posLength;
-        for (const intCount in this.#neg)
-            if (this.#neg[intCount][2] > 1)
-                for (const dp in this.#neg[intCount][1])
+
+        const neg = Object.keys(this.#neg), nLen = neg.length;
+        let n = nLen - 1;
+        for (n; n >= 0; n--) {
+            const intCount = neg[n];
+            if (this.#neg[intCount][2] > 1) {
+                const negObj = Object.keys(this.#neg[intCount][1]), lenObj = negObj.length;
+                let nObj = lenObj - 1;
+                for (nObj; nObj >= 0; nObj--) {
+                    const dp = negObj[nObj];
                     if (this.#neg[intCount][1][dp][1] > 1)
                         this.#neg[intCount][2] -= this.#neg[intCount][1][dp][1],
                             this.#negLength -= this.#neg[intCount][1][dp][1],
                             this.#neg[intCount][1][dp][1] = 0;
+                }
+            }
+        }
 
-        for (const intCount in this.#pos)
-            if (this.#pos[intCount][2] > 1)
-                for (const dp in this.#pos[intCount][1])
+        const pos = Object.keys(this.#pos), pLen = pos.length;
+        let p = pLen - 1;
+        for (p; p >= 0; p--) {
+            const intCount = pos[p];
+            if (this.#pos[intCount][2] > 1) {
+                const posObj = Object.keys(this.#pos[intCount][1]), lenObj = posObj.length;
+                let pObj = lenObj - 1;
+                for (pObj; pObj >= 0; pObj--) {
+                    const dp = posObj[pObj];
                     if (this.#pos[intCount][1][dp][1] > 1)
                         this.#pos[intCount][2] -= this.#pos[intCount][1][dp][1],
                             this.#posLength -= this.#pos[intCount][1][dp][1],
                             this.#pos[intCount][1][dp][1] = 0;
+                }
+            }
+        }
+
         this.#arrange();
         return previousLength != this.#negLength + this.#posLength;
     }
@@ -533,21 +571,41 @@ export default class AroTable {
      */
     clearDuplicates () {
         const previousLength = this.#negLength + this.#posLength;
-        for (const intCount in this.#neg)
-            if (this.#neg[intCount][2] > 1)
-                for (const dp in this.#neg[intCount][1])
+
+        const neg = Object.keys(this.#neg), nLen = neg.length;
+        let n = nLen - 1;
+        for (n; n >= 0; n--) {
+            const intCount = neg[n];
+            if (this.#neg[intCount][2] > 1) {
+                const negObj = Object.keys(this.#neg[intCount][1]), lenObj = negObj.length;
+                let nObj = lenObj - 1;
+                for (nObj; nObj >= 0; nObj--) {
+                    const dp = negObj[nObj];
                     if (this.#neg[intCount][1][dp][1] > 0)
                         this.#neg[intCount][2] -= (this.#neg[intCount][1][dp][1] - 1),
                             this.#negLength -= (this.#neg[intCount][1][dp][1] - 1),
                             this.#neg[intCount][1][dp][1] = 1;
+                }
+            }
+        }
 
-        for (const intCount in this.#pos)
-            if (this.#pos[intCount][2] > 1)
-                for (const dp in this.#pos[intCount][1])
-                    if (this.#pos[intCount][1][dp][1] > 1)
+        const pos = Object.keys(this.#pos), pLen = pos.length;
+        let p = pLen - 1;
+        for (p; p >= 0; p--) {
+            const intCount = pos[p];
+            if (this.#pos[intCount][2] > 1) {
+                const posObj = Object.keys(this.#pos[intCount][1]), lenObj = posObj.length;
+                let pObj = lenObj - 1;
+                for (pObj; pObj >= 0; pObj--) {
+                    const dp = posObj[pObj];
+                    if (this.#pos[intCount][1][dp][1] > 0)
                         this.#pos[intCount][2] -= (this.#pos[intCount][1][dp][1] - 1),
                             this.#posLength -= (this.#pos[intCount][1][dp][1] - 1),
                             this.#pos[intCount][1][dp][1] = 1;
+                }
+            }
+        }
+
         this.#arrange();
         return previousLength != this.#negLength + this.#posLength;
     }
@@ -559,20 +617,40 @@ export default class AroTable {
     returnDuplicates () {
         const duplicates = [];
         let index = 0;
-        for (const int in this.#neg)
-            if (this.#neg[int][2] > 1)
-                for (const dp in this.#neg[int][1])
-                    if (this.#neg[int][1][dp][1] > 1)
-                        duplicates[index] = this.#trimNum((Number(int) * -1) + Number(dp)),
-                            index++;
 
-        for (const int in this.#pos)
-            if (this.#pos[int][2] > 1)
-                for (const dp in this.#pos[int][1])
-                    if (this.#pos[int][1][dp][1] > 1)
-                        duplicates[index] = this.#trimNum(Number(int) + Number(dp)),
+        const neg = Object.keys(this.#neg), nLen = neg.length;
+        let n = nLen - 1;
+        for (n; n >= 0; n--) {
+            const intCount = neg[n];
+            if (this.#neg[intCount][2] > 1) {
+                const negObj = this.#mergeSort(Object.keys(this.#neg[intCount][1])), lenObj = negObj.length;
+                let nObj = 0;
+                for (nObj; nObj < lenObj; nObj++) {
+                    const dp = negObj[nObj];
+                    if (this.#neg[intCount][1][dp][1] > 1)
+                        duplicates[index] = this.#trimNum((Number(intCount) * -1) + Number(dp)),
                             index++;
-        return duplicates.length > 0 ? this.#mergeSort(duplicates) : false;
+                }
+            }
+        }
+
+        const pos = Object.keys(this.#pos), pLen = pos.length;
+        let p = 0;
+        for (p; p < pLen; p++) {
+            const intCount = pos[p];
+            if (this.#pos[intCount][2] > 1) {
+                const posObj = this.#mergeSort(Object.keys(this.#pos[intCount][1])), lenObj = posObj.length;
+                let pObj = 0;
+                for (pObj; pObj < lenObj; pObj++) {
+                    const dp = posObj[pObj];
+                    if (this.#pos[intCount][1][dp][1] > 1)
+                        duplicates[index] = this.#trimNum(Number(intCount) + Number(dp)),
+                            index++;
+                }
+            }
+        }
+
+        return duplicates.length > 0 ? duplicates : false;
     }
 
     /**
@@ -581,20 +659,40 @@ export default class AroTable {
     returnUnits () {
         const units = [];
         let index = 0;
-        for (const int in this.#neg)
-            if (this.#neg[int][2])
-                for (const dp in this.#neg[int][1])
-                    if (this.#neg[int][1][dp][1] == 1)
-                        units[index] = this.#trimNum((Number(int) * -1) + Number(dp)),
-                            index++;
 
-        for (const int in this.#pos)
-            if (this.#pos[int][2])
-                for (const dp in this.#pos[int][1])
-                    if (this.#pos[int][1][dp][1] == 1)
-                        units[index] = this.#trimNum(Number(int) + Number(dp)),
+        const neg = Object.keys(this.#neg), nLen = neg.length;
+        let n = nLen - 1;
+        for (n; n >= 0; n--) {
+            const intCount = neg[n];
+            if (this.#neg[intCount][2]) {
+                const negObj = this.#mergeSort(Object.keys(this.#neg[intCount][1])), lenObj = negObj.length;
+                let nObj = 0;
+                for (nObj; nObj < lenObj; nObj++) {
+                    const dp = negObj[nObj];
+                    if (this.#neg[intCount][1][dp][1] == 1)
+                        units[index] = this.#trimNum((Number(intCount) * -1) + Number(dp)),
                             index++;
-        return units.length > 0 ? this.#mergeSort(units) : false;
+                }
+            }
+        }
+
+        const pos = Object.keys(this.#pos), pLen = pos.length;
+        let p = 0;
+        for (p; p < pLen; p++) {
+            const intCount = pos[p];
+            if (this.#pos[intCount][2]) {
+                const posObj = this.#mergeSort(Object.keys(this.#pos[intCount][1])), lenObj = posObj.length;
+                let pObj = 0;
+                for (pObj; pObj < lenObj; pObj++) {
+                    const dp = posObj[pObj];
+                    if (this.#pos[intCount][1][dp][1] == 1)
+                        units[index] = this.#trimNum(Number(intCount) + Number(dp)),
+                            index++;
+                }
+            }
+        }
+
+        return units.length > 0 ? units : false;
     }
 
     /**
@@ -603,13 +701,24 @@ export default class AroTable {
     returnNegatives () {
         const negatives = [];
         let index = 0;
-        for (const neg in this.#neg)
-            if (this.#neg[neg][2])
-                for (const dp in this.#neg[neg][1])
-                    if (this.#neg[neg][1][dp][1] != 0)
-                        negatives[index] = this.#trimNum((Number(neg) * -1) + Number(dp)),
+
+        const neg = Object.keys(this.#neg), nLen = neg.length;
+        let n = nLen - 1;
+        for (n; n >= 0; n--) {
+            const intCount = neg[n];
+            if (this.#neg[intCount][2]) {
+                const negObj = this.#mergeSort(Object.keys(this.#neg[intCount][1])), lenObj = negObj.length;
+                let nObj = 0;
+                for (nObj; nObj < lenObj; nObj++) {
+                    const dp = negObj[nObj];
+                    if (this.#neg[intCount][1][dp][1] != 0)
+                        negatives[index] = this.#trimNum((Number(intCount) * -1) + Number(dp)),
                             index++;
-        return negatives.length > 0 ? this.#mergeSort(negatives) : false;
+                }
+            }
+        }
+
+        return negatives.length > 0 ? negatives : false;
     }
 
     /**
@@ -618,13 +727,24 @@ export default class AroTable {
     returnPositives () {
         const positives = [];
         let index = 0;
-        for (const pos in this.#pos)
-            if (this.#pos[pos][2])
-                for (const dp in this.#pos[pos][1])
-                    if (this.#pos[pos][1][dp][1] != 0)
-                        positives[index] = this.#trimNum(Number(pos) + Number(dp)),
+
+        const pos = Object.keys(this.#pos), pLen = pos.length;
+        let p = 0;
+        for (p; p < pLen; p++) {
+            const intCount = pos[p];
+            if (this.#pos[intCount][2]) {
+                const posObj = this.#mergeSort(Object.keys(this.#pos[intCount][1])), lenObj = posObj.length;
+                let pObj = 0;
+                for (pObj; pObj < lenObj; pObj++) {
+                    const dp = posObj[pObj];
+                    if (this.#pos[intCount][1][dp][1] != 0)
+                        positives[index] = this.#trimNum(Number(intCount) + Number(dp)),
                             index++;
-        return positives.length > 0 ? this.#mergeSort(positives) : false;
+                }
+            }
+        }
+
+        return positives.length > 0 ? positives : false;
     }
 
     /**
