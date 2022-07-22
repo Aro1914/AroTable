@@ -36,7 +36,7 @@
 
 ## Description
 
-AroTable is a number data structure capable of sorting itself on any interaction that calls for the internal structure to be updated. It utilizes the same mechanism used by Bucket Sort to arrange the whole number portion of numbers stored in it into an array representation, while MergeSort is used to determine the accurate position in which the decimal portions are to be attached.  
+AroTable is a number data structure capable of sorting itself on any interaction that calls for the internal structure to be updated. It utilizes the same mechanism used by Count Sort to arrange the whole number portion of numbers stored in it into an array representation, while MergeSort is used to determine the accurate position in which the decimal portions are to be attached.  
 
 > AroTable boasts a Big O Notation for time complexity of O(n) in adding and removing, and an amazing O(1) in searching!
 
