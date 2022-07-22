@@ -1,5 +1,5 @@
 {
-  "name": "arotable",
+  "name": "@aro1914/arotable",
   "version": "5.1.0",
   "description": "A self-sorting number data structure.",
   "main": "AroTable.js",
