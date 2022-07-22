@@ -1,5 +1,5 @@
 {
-  "name": "@aro1914/arotable",
+  "name": "arotable",
   "version": "5.1.0",
   "description": "A self-sorting number data structure.",
   "main": "AroTable.js",
@@ -22,8 +22,5 @@
   "bugs": {
     "url": "https://github.com/Aro1914/AroTable/issues"
   },
-  "homepage": "https://github.com/Aro1914/AroTable#readme",
-  "dependencies": {
-    "np": "^7.6.2"
-  }
+  "homepage": "https://github.com/Aro1914/AroTable#readme"
 }

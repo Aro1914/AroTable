@@ -86,7 +86,7 @@ export default class AroTable {
 
     #returnParts (el) {
         const dp = this.#trimNum(el % 1);
-        return dp == 1 ? [this.#trimNum((el - (el % 1)) + (el > 0 ? dp : dp * -1)), 0] : [this.#trimNum(this.#trimNum(el) - dp), dp];
+        return dp == 1 ? [this.#trimNum((el - (el % 1)) + (el > 0 ? dp : dp * -1)), 0] : [this.#trimNum((el) - (el % 1)), dp];
     }
 
     #returnInputParts (number) {

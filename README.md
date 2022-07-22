@@ -36,7 +36,9 @@
 
 ## Description
 
-AroTable is a number data structure capable of sorting itself on any manipulation that calls for the internal structure to be updated. Running on two powerful sorting algorithms—[AroSort](https://github.com/Sight-Innovation/AroSort) and MergeSort, with [AroSort](https://github.com/Sight-Innovation/AroSort) sorting the integer portions of numbers stored in the AroTable, while MergeSort sorts the decimal portions—AroTable boasts a Big O Notation for time complexity of O(n) in adding and removing, and an amazing O(1) in searching!
+AroTable is a number data structure capable of sorting itself on any interaction that calls for the internal structure to be updated. It utilizes the same mechanism used by Bucket Sort to arrange the whole number portion of numbers stored in it into an array representation, while MergeSort is used to determine the accurate position in which the decimal portions are to be attached.  
+
+> AroTable boasts a Big O Notation for time complexity of O(n) in adding and removing, and an amazing O(1) in searching!
 
 Compatible with both client-side and server-side environments.
 
@@ -46,7 +48,7 @@ Compatible with both client-side and server-side environments.
 
 For the server-side implementation, see the [AroTable-For-Server-Side Repo](https://github.com/Aro1914/AroTable-For-Server-Side)
 
-Install the **AroTable** package with [NPM](https://www.npmjs.org/):
+Install the **AroTable** package using [NPM](https://www.npmjs.org/):
 
 ```sh
 npm install arotable
@@ -77,7 +79,7 @@ The AroTable constructor works like an overloaded constructor, it could be givin
 The maximum number of decimal places for numbers stored in the AroTable is **3**, e.g. _1.234, 3.345, -23434.334, -0.646_.  
 
 - Any value that exceeds this amount of decimal places would trigger an immediate approximation to 3 decimal places, e.g _12.3455345_ -> _12.346_.  
-- The original form of the value would be discarded and the approximate value stored. In the earlier example, searching for _12.3455345_ would result in _false_ being returned, while a search for _12.346_ would return its location.  
+- The original form of the value would be discarded and the newly approximated value stored. In the earlier example, searching for _12.3455345_ would result in _false_ being returned, rather a search for its approximated value to 3 decimal places _12.346_ would return its exact location.  
 - In the event one attempts to insert values like _4.999999_ and _-12.999999_, they will both be rounded to _5_ and _-13_ respectively.  
 
 ## Methods
@@ -104,7 +106,7 @@ aroTable.size(); // Returns 3
 
 ### The **add()** Method
 
-The **add()** method, as the name suggests adds the arguments passed to it to the AroTable. Its arguments could be an number, multiple numbers, or an array, or better still a combination of both.  
+The **add()** method, as the name suggests adds the arguments passed to it to the AroTable. Its arguments could be a number, multiple numbers, or an array, or better still a combination of both.  
 
 Returns true if at least a value was added successfully, returns false if not:
 
@@ -116,7 +118,7 @@ aroTable.add(-2.45, 3); // Returns true
 aroTable.add([4]); // Returns true
 aroTable.add([5, -6.999]); // Returns true
 aroTable.add([-7, 8.343], -9); // Returns true
-aroTable.add([10, -11], 12.4432, -13); // Returns true
+aroTable.add([10, -11], 12.432, -13); // Returns true
 
 aroTable.add(); // Returns false
 ```
@@ -205,7 +207,7 @@ aroTable.returnAny(num => num >= 10); // Returns false
 
 ### The **search()** Method
 
-The **search()** method takes in an number argument. Returns an array with two values, the first is the first index the number occurs in an array representation of the AroTable, and the second shows how many times it occurred. If no occurrence is found, returns false.
+The **search()** method takes in a number argument. Returns an array with two values, the first shows the index the number first occurs in an array representation of the AroTable, and the second shows how many times it occurs. If no occurrence is found, returns false.
 
 ```js
 const aroTable = new AroTable(1.43, -23, -2, 5, -6.9, -2, 6, 7.831, 3);
