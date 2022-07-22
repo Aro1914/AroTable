@@ -186,7 +186,6 @@ export default class AroTable {
         const [whole, dp] = this.#returnParts(number);
         if (number < 0) {
             const nWhole = whole * -1;
-            console.log(nWhole);
             if (!this.#neg[nWhole])
                 this.#neg[nWhole] = [null, {}, 1],
                     this.#neg[nWhole][1][dp] = [null, 1];
@@ -234,7 +233,6 @@ export default class AroTable {
         }
         else if (this.search(number)) {
             const [whole, dp] = this.#returnParts(number);
-            console.log(whole, dp);
             if (Number(number) < 0)
                 this.#neg[Number(whole * -1)][2]--,
                     this.#neg[Number(whole * -1)][1][dp][1]--,
