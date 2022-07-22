@@ -1,6 +1,6 @@
 {
   "name": "arotable",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "description": "A self-sorting number data structure.",
   "main": "AroTable.js",
   "scripts": {
