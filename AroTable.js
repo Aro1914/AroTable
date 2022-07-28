@@ -317,19 +317,17 @@ export default class AroTable {
             number == undefined ||
             isNaN(number)) return false;
         const [whole, dp] = this.#returnInputParts(number);
-        if (Number(number) < 0) {
-            const nWhole = whole * -1;
-            if (this.#neg[nWhole]?.[2])
-                if (this.#neg[nWhole][1]?.[dp])
-                    if (this.#neg[nWhole][1][dp][1])
-                        return this.#neg[nWhole][1][dp];
-        }
-        else
-            if (this.#pos[whole]?.[2])
-                if (this.#pos[whole][1]?.[dp])
-                    if (this.#pos[whole][1][dp][1])
-                        return this.#pos[whole][1][dp];
-        return false;
+
+        const searchOut = (obj, whole, dp, isNegative) => {
+            if (isNegative) whole = whole * -1;
+            if (obj[whole]?.[2]) {
+                if (obj[whole][1]?.[dp])
+                    if (obj[whole][1][dp][1])
+                        return obj[whole][1][dp];
+            }
+            return false;
+        };
+        return Number(number) < 0 ? searchOut(this.#neg, whole, dp, Number(number) < 0) : searchOut(this.#pos, whole, dp, Number(number) < 0);
     }
 
     /**
@@ -495,39 +493,28 @@ export default class AroTable {
     dropUnits () {
         const previousLength = this.#negLength + this.#posLength;
 
-        const neg = Object.keys(this.#neg), nLen = neg.length;
-        let n = nLen - 1;
-        for (n; n >= 0; n--) {
-            const intCount = neg[n];
-            if (this.#neg[intCount][2]) {
-                const negObj = Object.keys(this.#neg[intCount][1]), lenObj = negObj.length;
-                let nObj = lenObj - 1;
-                for (nObj; nObj >= 0; nObj--) {
-                    const dp = negObj[nObj];
-                    if (this.#neg[intCount][1][dp][1] == 1)
-                        this.#neg[intCount][1][dp][1] = 0,
-                            this.#neg[intCount][2]--,
-                            this.#negLength--;
+        const dropIn = (obj, forNegatives = true) => {
+            const keys = Object.keys(obj), len = keys.length;
+            let i = len - 1;
+            for (i; i >= 0; i--) {
+                const intCount = keys[i];
+                if (obj[intCount][2]) {
+                    const dpKeys = Object.keys(obj[intCount][1]), dpKeysLength = dpKeys.length;
+                    let x = dpKeysLength - 1;
+                    for (x; x >= 0; x--) {
+                        const dp = dpKeys[x];
+                        if (obj[intCount][1][dp][1] == 1)
+                            obj[intCount][1][dp][1] = 0,
+                                obj[intCount][2]--,
+                                forNegatives ? this.#negLength-- : this.#posLength--;
+                    }
                 }
             }
-        }
+        };
 
-        const pos = Object.keys(this.#pos), pLen = pos.length;
-        let p = pLen - 1;
-        for (p; p >= 0; p--) {
-            const intCount = pos[p];
-            if (this.#pos[intCount][2]) {
-                const posObj = Object.keys(this.#pos[intCount][1]), lenObj = posObj.length;
-                let pObj = lenObj - 1;
-                for (pObj; pObj >= 0; pObj--) {
-                    const dp = posObj[pObj];
-                    if (this.#pos[intCount][1][dp][1] == 1)
-                        this.#pos[intCount][1][dp][1] = 0,
-                            this.#pos[intCount][2]--,
-                            this.#posLength--;
-                }
-            }
-        }
+        dropIn(this.#neg);
+        dropIn(this.#pos, false);
+
         this.#arrange();
         return previousLength != this.#negLength + this.#posLength;
     }
@@ -539,39 +526,27 @@ export default class AroTable {
     dropDuplicates () {
         const previousLength = this.#negLength + this.#posLength;
 
-        const neg = Object.keys(this.#neg), nLen = neg.length;
-        let n = nLen - 1;
-        for (n; n >= 0; n--) {
-            const intCount = neg[n];
-            if (this.#neg[intCount][2] > 1) {
-                const negObj = Object.keys(this.#neg[intCount][1]), lenObj = negObj.length;
-                let nObj = lenObj - 1;
-                for (nObj; nObj >= 0; nObj--) {
-                    const dp = negObj[nObj];
-                    if (this.#neg[intCount][1][dp][1] > 1)
-                        this.#neg[intCount][2] -= this.#neg[intCount][1][dp][1],
-                            this.#negLength -= this.#neg[intCount][1][dp][1],
-                            this.#neg[intCount][1][dp][1] = 0;
+        const dropIn = (obj, forNegatives = true) => {
+            const keys = Object.keys(obj), len = keys.length;
+            let i = len - 1;
+            for (i; i >= 0; i--) {
+                const intCount = keys[i];
+                if (obj[intCount][2] > 1) {
+                    const dpKeys = Object.keys(obj[intCount][1]), dpKeysLength = dpKeys.length;
+                    let x = dpKeysLength - 1;
+                    for (x; x >= 0; x--) {
+                        const dp = dpKeys[x];
+                        if (obj[intCount][1][dp][1] > 1)
+                            obj[intCount][2] -= obj[intCount][1][dp][1],
+                                forNegatives ? this.#negLength -= obj[intCount][1][dp][1] : this.#posLength -= obj[intCount][1][dp][1],
+                                obj[intCount][1][dp][1] = 0;
+                    }
                 }
             }
-        }
+        };
 
-        const pos = Object.keys(this.#pos), pLen = pos.length;
-        let p = pLen - 1;
-        for (p; p >= 0; p--) {
-            const intCount = pos[p];
-            if (this.#pos[intCount][2] > 1) {
-                const posObj = Object.keys(this.#pos[intCount][1]), lenObj = posObj.length;
-                let pObj = lenObj - 1;
-                for (pObj; pObj >= 0; pObj--) {
-                    const dp = posObj[pObj];
-                    if (this.#pos[intCount][1][dp][1] > 1)
-                        this.#pos[intCount][2] -= this.#pos[intCount][1][dp][1],
-                            this.#posLength -= this.#pos[intCount][1][dp][1],
-                            this.#pos[intCount][1][dp][1] = 0;
-                }
-            }
-        }
+        dropIn(this.#neg);
+        dropIn(this.#pos, false);
 
         this.#arrange();
         return previousLength != this.#negLength + this.#posLength;
@@ -584,39 +559,27 @@ export default class AroTable {
     clearDuplicates () {
         const previousLength = this.#negLength + this.#posLength;
 
-        const neg = Object.keys(this.#neg), nLen = neg.length;
-        let n = nLen - 1;
-        for (n; n >= 0; n--) {
-            const intCount = neg[n];
-            if (this.#neg[intCount][2] > 1) {
-                const negObj = Object.keys(this.#neg[intCount][1]), lenObj = negObj.length;
-                let nObj = lenObj - 1;
-                for (nObj; nObj >= 0; nObj--) {
-                    const dp = negObj[nObj];
-                    if (this.#neg[intCount][1][dp][1] > 0)
-                        this.#neg[intCount][2] -= (this.#neg[intCount][1][dp][1] - 1),
-                            this.#negLength -= (this.#neg[intCount][1][dp][1] - 1),
-                            this.#neg[intCount][1][dp][1] = 1;
+        const clearIn = (obj, forNegatives = true) => {
+            const keys = Object.keys(obj), len = keys.length;
+            let i = len - 1;
+            for (i; i >= 0; i--) {
+                const intCount = keys[i];
+                if (obj[intCount][2] > 1) {
+                    const dpKeys = Object.keys(obj[intCount][1]), dpKeysLength = dpKeys.length;
+                    let x = dpKeysLength - 1;
+                    for (x; x >= 0; x--) {
+                        const dp = dpKeys[x];
+                        if (obj[intCount][1][dp][1] > 0)
+                            obj[intCount][2] -= (obj[intCount][1][dp][1] - 1),
+                                forNegatives ? this.#negLength -= (obj[intCount][1][dp][1] - 1) : this.#posLength -= (obj[intCount][1][dp][1] - 1),
+                                obj[intCount][1][dp][1] = 1;
+                    }
                 }
             }
-        }
+        };
 
-        const pos = Object.keys(this.#pos), pLen = pos.length;
-        let p = pLen - 1;
-        for (p; p >= 0; p--) {
-            const intCount = pos[p];
-            if (this.#pos[intCount][2] > 1) {
-                const posObj = Object.keys(this.#pos[intCount][1]), lenObj = posObj.length;
-                let pObj = lenObj - 1;
-                for (pObj; pObj >= 0; pObj--) {
-                    const dp = posObj[pObj];
-                    if (this.#pos[intCount][1][dp][1] > 0)
-                        this.#pos[intCount][2] -= (this.#pos[intCount][1][dp][1] - 1),
-                            this.#posLength -= (this.#pos[intCount][1][dp][1] - 1),
-                            this.#pos[intCount][1][dp][1] = 1;
-                }
-            }
-        }
+        clearIn(this.#neg);
+        clearIn(this.#pos, false);
 
         this.#arrange();
         return previousLength != this.#negLength + this.#posLength;
