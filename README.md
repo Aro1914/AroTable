@@ -148,7 +148,7 @@ aroTable.add('four', 'five'); // Returns false
 If the arguments passed contains number convertible types along with non-number convertible types, the **add()** method will add the valid input to the AroTable, ignoring the non-number convertible types:
 
 ```js
-aroTable.add(1,'-2.1', 'three', -4, '5', null, 7.32, undefined, 'nine'); // returns true
+aroTable.add(1,'-2.1', 'three', -4, '5', null, 7.32, undefined, 'nine'); // Returns true
 // In this case, 1, '-2.1', -4, '5', 7.32 are added to the AroTable, while all other non-number convertible typed values are ignored.
 ```
 
@@ -195,7 +195,7 @@ aroTable.returnArray(); // Returns [ 2.7, 5, 6.124, 9.993 ]
 
 ### The **returnAny()** Method
 
-The **returnAny()** method, is a higher-order method that takes in a callback function and returns any value in the AroTable that meets the condition specified in the callback function. Returns true if at least a value meets the condition, returns false if not:
+The **returnAny()** method, is a higher-order method that takes in a callback function and returns any value in the AroTable that meets the condition specified in the callback function. Returns an array containing the number(s) that meet the condition, returns false if none could be found that fulfills the condition:
 
 ```js
 const aroTable = new AroTable(2.7, 1.2, -2.4, 4, 5, 6.124, 8, -2, 9.993, 1, 0);
@@ -234,7 +234,7 @@ aroTable.returnArray(); // Returns [ 1, 2.343, 4, 5.1, 6, 6.3 ]
 
 ### The **returnDuplicates()** Method
 
-The **returnDuplicates()** method returns a sorted array (using Merge Sort) of all numbers with duplicated occurrences in the AroTable, if none exists, returns false:
+The **returnDuplicates()** method returns a sorted array of all numbers with duplicated occurrences in the AroTable, if none exists, returns false:
 
 ```js
 const aroTable = new AroTable(-1, -2.343, 3, 4, -2.343, 3, 4, -5.1, 6, 6.3, 6.3, 3);
@@ -270,7 +270,7 @@ aroTable.dropUnits(); // Returns false
 
 ### The **returnUnits()** Method
 
-The **returnUnits()** method returns a sorted array (using Merge Sort) of all numbers with a single occurrence in the AroTable, if none exists, returns false:
+The **returnUnits()** method returns a sorted array of all numbers with a single occurrence in the AroTable, if none exists, returns false:
 
 ```js
 const aroTable = new AroTable(-1, -2.343, 3, 4, -2.343, 3, 4, -5.1, 6, 6.3, 6.3, 3);
@@ -294,7 +294,7 @@ aroTable.dropPositives(); // Returns false
 
 ### The **returnPositives()** Method
 
-The **returnPositives()** method returns a sorted array (using Merge Sort) of all positive numbers in the AroTable, if none exists returns false:
+The **returnPositives()** method returns a sorted array of all positive numbers in the AroTable, if none exists returns false:
 
 ```js
 const aroTable = new AroTable(-1, -2.343, 3, 4, -2.343, 3, 4, -5.1, 6, 6.3, 6.3, 3);
@@ -318,7 +318,7 @@ aroTable.dropNegatives(); // Returns false
 
 ### The **returnNegatives()** Method
 
-The **returnNegatives()** method returns a sorted array (using Merge Sort) of all negative numbers in the AroTable, if none exists returns false:
+The **returnNegatives()** method returns a sorted array of all negative numbers in the AroTable, if none exists returns false:
 
 ```js
 const aroTable = new AroTable(-1, -2.343, 3, 4, -2.343, 3, 4, -5.1, 6, 6.3, 6.3, 3);
@@ -350,7 +350,7 @@ aroTable.returnArray(); // Returns []
 aroTable.getDistribution(); // Returns { 'Positive Numbers': 0, 'Negative Numbers': 0 }
 ```
 
-A better way to check if the AroTable is empty, is to use...
+> A better way to check if the AroTable is empty, is to use...
 
 ### The **isEmpty()** Method
 
