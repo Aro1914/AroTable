@@ -28,14 +28,14 @@ export default class AroTable {
     #shouldArrange = false;
     /**
      * Creates an AroTable. Works like an overloaded constructor, it could take no arguments, or it could take a single number or multiple numbers could be passed, or an array, or better still a combination of both.
-     * @param number A value that can be converted to a valid number
+     * @param number A value that can be converted to a valid number.
      * @param numbers Values that can be converted to valid numbers. They could be multiple numbers, an array, nested arrays, or a combination of both.
      */
     constructor (number = null, ...numbers) {
         this.add(number, ...numbers);
     }
 
-    // A utility method that implements the MergeSort sorting algorithm
+    // Implements the MergeSort sorting algorithm
     #mergeSort (array) {
         if (array.length <= 1) return array;
 
@@ -63,7 +63,7 @@ export default class AroTable {
         return sorted_values;
     };
 
-    // A utility method that implements aggressive approximation to 3 decimal places
+    // Implements aggressive approximation to 3 decimal places
     #trimNum (el) {
         let strDp = String(+(Math.round(el % 1 + 'e+3') + 'e-3'));
         el > 0 ?
@@ -86,18 +86,18 @@ export default class AroTable {
         return el < 0 && (el - (el % 1)) == 0 ? Number(str) * -1 : Number(str);
     }
 
-    // A utility method that splits the number argument into the whole number part and its decimal part rounded up to 3 decimal places
+    // Splits the number argument into the whole number part and its decimal part rounded up to 3 decimal places
     #returnParts (el) {
         const dp = this.#trimNum(el % 1);
         return dp == 1 ? [this.#trimNum((el - (el % 1)) + (el > 0 ? dp : dp * -1)), 0] : [this.#trimNum((el) - (el % 1)), dp];
     }
 
-    // A utility method used to split the user's number input into its whole number part and its exact decimal part untouched, with no approximation applied
+    // Splits the user's number input into its whole number part and its exact decimal part untouched, with no approximation applied
     #returnInputParts (number) {
         return [number - (number % 1), number % 1 != 0 ? Number(`${number < 0 ? '-0' : '0'}.` + String(number).split('.')[1]) : (number % 1)];
     }
 
-    // A utility method that arranges numbers into the array representation with the values in the AroTable that have a valid occurrence. At the same it manages the logging of the initial occurrence and occurrence count of individual numbers in the AroTable in the array to be returned upon a search for a number with a valid occurrence
+    // Arranges numbers into the array representation with the values in the AroTable that have a valid occurrence. At the same it manages the logging of the initial occurrence and occurrence count of individual numbers in the AroTable in the array to be returned upon a search for a number with a valid occurrence
     #arrange () {
         let index = 0;
         this.#array = [];
@@ -183,7 +183,7 @@ export default class AroTable {
         }
     };
 
-    // A utility method that inserts a single number into the AroTable
+    // Inserts a single number into the AroTable
     #insert (number) {
         if (!number && number !== 0 ||
             isNaN(number) ||
@@ -211,7 +211,7 @@ export default class AroTable {
         return;
     }
 
-    // A utility method that inserts numbers from an array into the AroTable
+    // Inserts numbers from an array into the AroTable
     #insertArray (numbers) {
         if (numbers == null ||
             numbers == undefined ||
@@ -228,7 +228,7 @@ export default class AroTable {
         return;
     }
 
-    // A utility method that implements the removal of a single occurrence of a number from the AroTable
+    // Implements the removal of a single occurrence of a number from the AroTable
     #enforceRemove (number = null, ...numbers) {
         if (numbers) {
             const numLength = numbers.length;
@@ -257,7 +257,7 @@ export default class AroTable {
         return;
     }
 
-    // A utility method that implements the complete removal of all occurrences of a number from the AroTable
+    // Implements the complete removal of all occurrences of a number from the AroTable
     #enforceRemoveAll (number = null, ...numbers) {
         if (numbers) {
             const numLength = numbers.length;
@@ -293,7 +293,7 @@ export default class AroTable {
 
     /**
      * Adds the given arguments to the AroTable.
-     * @param number A value that can be converted to a valid number
+     * @param number A value that can be converted to a valid number.
      * @param numbers Values that can be converted to valid numbers. They could be in an array, nested arrays, or a combination of both.
      * @returns True if successful, returns false if not.
      */
@@ -310,10 +310,10 @@ export default class AroTable {
     /**
      * Searches for an occurrence of the given value in the AroTable.
      * @param number A value that can be converted to a valid number
-     * @param lossless A boolean value used to set the accuracy of the search
+     * @param lossless A boolean value used to set the accuracy for the search. Default value set to true.
      * @returns {Array<Number>} An array with two values, the first is the first index the number occurred in the AroTable, and the second shows how many times it occurred. If no occurrence is found, returns false.
      * 
-     * For a lossless search it returns results for the exact number given, down to the last decimal place
+     * For a lossless search it returns results for the exact number given, down to the last decimal place.
      * 
      * For a lossy search on the other hand it returns results for how many times the integer part of the given number can be found in the AroTable irrespective of its varying decimal parts.
      */
@@ -329,6 +329,7 @@ export default class AroTable {
                 if (obj[whole]?.[2]) {
                     return [obj[whole][0], obj[whole][2]];
                 }
+                return false;
             };
             return Number(number) < 0 ? searchOut(this.#neg, whole, true) : searchOut(this.#pos, whole, false);
         }
@@ -347,7 +348,7 @@ export default class AroTable {
 
     /**
      * Deletes the an occurrence of the given argument(s) from the AroTable.
-     * @param number A value that can be converted to a valid number
+     * @param number A value that can be converted to a valid number.
      * @param numbers Values that can be converted to valid numbers. They could be in an array, nested arrays, or a combination of both.
      * @returns True if successful, returns false if not.
      */
@@ -360,7 +361,7 @@ export default class AroTable {
 
     /**
      * Deletes all occurrences of the given argument(s) from the AroTable.
-     * @param number A value that can be converted to a valid number
+     * @param number A value that can be converted to a valid number.
      * @param numbers Values that can be converted to valid numbers. They could be in an array, nested arrays, or a combination of both.
      * @returns True if successful, returns false if not.
      */

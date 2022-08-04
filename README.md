@@ -9,14 +9,14 @@
     - [Client-side Only](#client-side-only)
     - [**Decimal Places**](#decimal-places)
   - [Methods](#methods)
+    - [The **add()** Method](#the-add-method)
     - [The **returnArray()** Method](#the-returnarray-method)
     - [The **size()** Method](#the-size-method)
-    - [The **add()** Method](#the-add-method)
     - [The **remove()** Method](#the-remove-method)
     - [The **removeAll()** Method](#the-removeall-method)
+    - [The **search()** Method](#the-search-method)
     - [The **dropAny()** Method](#the-dropany-method)
     - [The **returnAny()** Method](#the-returnany-method)
-    - [The **search()** Method](#the-search-method)
     - [The **clearDuplicates()** Method](#the-clearduplicates-method)
     - [The **returnDuplicates()** Method](#the-returnduplicates-method)
     - [The **dropDuplicates()** method](#the-dropduplicates-method)
@@ -78,31 +78,11 @@ The AroTable constructor works like an overloaded constructor, it could be givin
 
 The maximum number of decimal places for numbers stored in the AroTable is **3**, e.g. _1.234, 3.345, -23434.334, -0.646_.  
 
-- Any value that exceeds this amount of decimal places would trigger an immediate approximation to 3 decimal places, e.g _12.3455345_ -> _12.346_.  
-- The original form of the value would be discarded and the newly approximated value stored. In the earlier example, searching for _12.3455345_ would result in _false_ being returned, rather a search for its approximated value to 3 decimal places _12.346_ would return its exact location.  
+- Any value that exceeds this amount of decimal places would trigger an immediate approximation to 3 decimal places, e.g _12.3455345_ -> _12.346_, the original form of the value would be irretrievable and the newly approximated value stored in its place.  
+- In the earlier example, running a lossless [search](#the-search-method) for _12.3455345_ would result in _false_ being returned, rather a lossy [search](#the-search-method) for its integer portion - _12_, would return the range of its occurrences.  
 - In the event one attempts to insert values like _4.999999_ and _-12.999999_, they will both be rounded to _5_ and _-13_ respectively.  
 
 ## Methods
-
-### The **returnArray()** Method
-
-The **returnArray()** method returns an array representation of the AroTable:
-
-```js
-const aroTable = new AroTable(0.1, 2.05, '-3.53', -4, ['23.23', -133]);
-
-aroTable.returnArray(); // Returns [ -133, -4, -3.53, 0.1, 2.05, 23.23 ]
-```
-
-### The **size()** Method
-
-The **size()** method returns the amount of numbers held in the AroTable:
-
-```js
-const aroTable = new AroTable(-1, 2.5, '3');
-
-aroTable.size(); // Returns 3
-```
 
 ### The **add()** Method
 
@@ -152,6 +132,26 @@ aroTable.add(1,'-2.1', 'three', -4, '5', null, 7.32, undefined, 'nine'); // Retu
 // In this case, 1, '-2.1', -4, '5', 7.32 are added to the AroTable, while all other non-number convertible typed values are ignored.
 ```
 
+### The **returnArray()** Method
+
+The **returnArray()** method returns an array representation of the AroTable:
+
+```js
+const aroTable = new AroTable(0.1, 2.05, '-3.53', -4, ['23.23', -133]);
+
+aroTable.returnArray(); // Returns [ -133, -4, -3.53, 0.1, 2.05, 23.23 ]
+```
+
+### The **size()** Method
+
+The **size()** method returns the amount of numbers held in the AroTable:
+
+```js
+const aroTable = new AroTable(-1, 2.5, '3');
+
+aroTable.size(); // Returns 3
+```
+
 ### The **remove()** Method
 
 The **remove()** method takes the same kind of arguments as the [add()](#the-add-method) method and then removes an occurrence of any value—that exists in the AroTable—passed as an argument from the AroTable. Returns true if at least a value was removed successfully, returns false if not:
@@ -176,6 +176,33 @@ const aroTable = new AroTable(2.1 ,2, -2.1, 4.33, -4, 5.1, 4.33, 5, 6, 2);
 aroTable.removeAll(-7); // Returns false
 aroTable.removeAll('2', [4.33, -2.1]); // Returns true
 aroTable.returnArray(); // Returns [ -4, 2.1, 5, 5.1, 6 ]
+```
+
+### The **search()** Method
+
+The **search()** method takes in a value (that can be converted to a valid number) argument and an optional second boolean argument, to perform two kinds of searches:
+
+- **Lossless** - The default search type, explicitly specified by passing a second boolean argument with the value of `true`.  
+  Returns results for the exact value passed as the first argument in an array with two values, the first shows the index the number first occurs in an array representation of the AroTable, and the second shows how many times it occurs.
+- **Lossy** - The alternative search type, explicitly specified by passing a second boolean argument with the value of `false`.  
+  Returns results for the integer reference of the value passed as the first argument in an array with two values, the first shows the index a number with the same integer portion first occurs in an array representation of the AroTable, and the second shows how many times such an occurrence appears.
+
+```js
+const aroTable = new AroTable(-4, '-0.78', -4.01, 3.981, -5.55, [-0.05, -3.4, -3, '0.64'], -4.678, '6.13',  5.79, 2, 0.56, -2.7);
+
+// Lossless Search
+aroTable.search(-3.4); // Returns [ 4, 1 ]
+aroTable.search(2); // Returns [ 11, 1 ]
+aroTable.search(5.79); // Returns [ 13, 1 ]
+aroTable.search('-0.78') // Returns [ 7, 1 ]
+aroTable.search(9); // Returns false
+
+// Lossy Search
+aroTable.search(-4.72, false) // Returns [ 1, 3 ]
+aroTable.search(0, false) // Returns [ 9, 2 ]
+aroTable.search(2.03, false) // Returns [ 11, 1 ]
+aroTable.search('-3.81', false) // Returns [ 4, 2 ]
+aroTable.search(9, false) // Returns false
 ```
 
 ### The **dropAny()** Method
@@ -203,20 +230,6 @@ const aroTable = new AroTable(2.7, 1.2, -2.4, 4, 5, 6.124, 8, -2, 9.993, 1, 0);
 aroTable.returnAny(num => num <= 2); // Returns [ -2, -2.4, 0, 1, 1.2 ]
 aroTable.returnAny(num => num % 2 == 0); // Returns [ -2, 0, 4, 8 ]
 aroTable.returnAny(num => num >= 10); // Returns false
-```
-
-### The **search()** Method
-
-The **search()** method takes in a number argument. Returns an array with two values, the first shows the index the number first occurs in an array representation of the AroTable, and the second shows how many times it occurs. If no occurrence is found, returns false.
-
-```js
-const aroTable = new AroTable(1.43, -23, -2, 5, -6.9, -2, 6, 7.831, 3);
-
-aroTable.search(-2); // Returns [ 2, 2 ]
-aroTable.search(3); // Returns [ 5, 1 ]
-aroTable.search(7.831); // Returns [ 8, 1 ]
-aroTable.search('-6.9') // Returns [ 1, 1 ]
-aroTable.search(9); // Returns false
 ```
 
 ### The **clearDuplicates()** Method
