@@ -237,7 +237,7 @@ export default class AroTable {
                 this.#enforceRemove(numbers[i]);
         }
         if (Array.isArray(number)) {
-            const numLength = numbers.length;
+            const numLength = number.length;
             let i = 0;
             for (i; i < numLength; i++)
                 this.#enforceRemove(number[i]);
@@ -310,13 +310,28 @@ export default class AroTable {
     /**
      * Searches for an occurrence of the given value in the AroTable.
      * @param number A value that can be converted to a valid number
+     * @param lossless A boolean value used to set the accuracy of the search
      * @returns {Array<Number>} An array with two values, the first is the first index the number occurred in the AroTable, and the second shows how many times it occurred. If no occurrence is found, returns false.
+     * 
+     * For a lossless search it returns results for the exact number given, down to the last decimal place
+     * 
+     * For a lossy search on the other hand it returns results for how many times the integer part of the given number can be found in the AroTable irrespective of its varying decimal parts.
      */
-    search (number) {
+    search (number, lossless = true) {
         if (number == null ||
             number == undefined ||
             isNaN(number)) return false;
         const [whole, dp] = this.#returnInputParts(number);
+
+        if (!lossless) {
+            const searchOut = (obj, whole, isNegative) => {
+                if (isNegative) whole = whole * -1;
+                if (obj[whole]?.[2]) {
+                    return [obj[whole][0], obj[whole][2]];
+                }
+            };
+            return Number(number) < 0 ? searchOut(this.#neg, whole, true) : searchOut(this.#pos, whole, false);
+        }
 
         const searchOut = (obj, whole, dp, isNegative) => {
             if (isNegative) whole = whole * -1;
@@ -327,7 +342,7 @@ export default class AroTable {
             }
             return false;
         };
-        return Number(number) < 0 ? searchOut(this.#neg, whole, dp, Number(number) < 0) : searchOut(this.#pos, whole, dp, Number(number) < 0);
+        return Number(number) < 0 ? searchOut(this.#neg, whole, dp, true) : searchOut(this.#pos, whole, dp, false);
     }
 
     /**
