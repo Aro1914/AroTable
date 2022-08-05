@@ -79,7 +79,7 @@ The AroTable constructor works like an overloaded constructor, it could be givin
 The maximum number of decimal places for numbers stored in the AroTable is **3**, e.g. _1.234, 3.345, -23434.334, -0.646_.  
 
 - Any value that exceeds this amount of decimal places would trigger an immediate approximation to 3 decimal places, e.g _12.3455345_ -> _12.346_, the original form of the value would be irretrievable and the newly approximated value stored in its place.  
-- In the earlier example, running a lossless [search](#the-search-method) for _12.3455345_ would result in _false_ being returned, rather a lossy [search](#the-search-method) for its integer portion - _12_, would return the range of its occurrences.  
+- In the earlier example, running a [lossless search](#the-search-method) for _12.3455345_ would result in _false_ being returned, rather a [lossy search](#the-search-method) for its integer portion - _12_, would return the range of its occurrences.  
 - In the event one attempts to insert values like _4.999999_ and _-12.999999_, they will both be rounded to _5_ and _-13_ respectively.  
 
 ## Methods

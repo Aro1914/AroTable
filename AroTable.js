@@ -266,7 +266,7 @@ export default class AroTable {
                 this.#enforceRemoveAll(numbers[i]);
         }
         if (Array.isArray(number)) {
-            const numLength = numbers.length;
+            const numLength = number.length;
             let i = 0;
             for (i; i < numLength; i++)
                 this.#enforceRemoveAll(number[i]);
