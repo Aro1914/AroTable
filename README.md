@@ -180,7 +180,7 @@ aroTable.returnArray(); // Returns [ -4, 2.1, 5, 5.1, 6 ]
 
 ### The **search()** Method
 
-The **search()** method takes in a value (that can be converted to a valid number) argument and an optional second boolean argument, to perform two kinds of searches:
+The **search()** method takes in a value (that can be converted to a valid number) and an optional second boolean argument, to perform two kinds of searches:
 
 - **Lossless** - The default search type, explicitly specified by passing a second boolean argument with the value of `true`.  
   Returns results for the exact value passed as the first argument in an array with two values, the first shows the index the number first occurs in an array representation of the AroTable, and the second shows how many times it occurs.
